@@ -5,7 +5,8 @@ colorscheme solarized
 
 " Make Vim more useful
 set nocompatible
-filetype off                  " required
+filetype plugin indent on                  " required
+execute pathogen#infect()
 
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
