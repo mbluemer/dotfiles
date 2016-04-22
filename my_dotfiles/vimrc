@@ -44,6 +44,8 @@ set wildmenu
 set esckeys
 " Allow backspace in insert mode
 set backspace=indent,eol,start
+"Opening for nerdtree
+nmap <leader>te :NERDTree<cr>
 " Optimize for fast terminal connections
 set ttyfast
 " Add the g flag to search/replace by default
@@ -138,7 +140,6 @@ let g:vimwiki_list = [
 											\{'path': '~/Documents/VimWiki/tech.wiki'}
 											\]
 au BufRead,BufNewFile *.wiki set filetype=vimwiki
-:autocmd FileType vimwiki map d :VimwikiMakeDiaryNote
 function! ToggleCalendar()
 				execute ":Calendar"
 				if exists("g:calendar_open")
