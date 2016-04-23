@@ -140,6 +140,7 @@ let g:vimwiki_list = [
 											\{'path': '~/Documents/VimWiki/tech.wiki'}
 											\]
 au BufRead,BufNewFile *.wiki set filetype=vimwiki
+:autocmd FileType vimwiki map gl :VimwikiDiaryGenerateLinks
 function! ToggleCalendar()
 				execute ":Calendar"
 				if exists("g:calendar_open")
