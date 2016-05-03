@@ -82,3 +82,8 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+alias gs="git status"
+alias ga="git add"
+alias gc="git commit -m"
+alias gpull="git pull"
+alias gpush="git push"
