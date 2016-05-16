@@ -52,6 +52,10 @@ set tabstop=4
 " wrap lines
 set wrap
 
+" Remove that annoying beeping and flashing
+set visualbell
+set t_vb=
+
 " For sake of practice I'm going to go ahead and remove the arrow keys
 noremap <Up> <NOP>
 noremap <Down> <NOP>
