@@ -30,7 +30,12 @@ let mapleader = ","
 set backspace=indent,eol,start
 
 " Switch syntax highlighting on
-syntax on
+syntax enable
+set background=dark
+colorscheme solarized
+
+" Set highlight for line that cursor is on
+set cursorline
 
 " Enable file type detection and do language-dependent indenting.
 filetype plugin indent on
