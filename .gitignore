@@ -1,0 +1,3 @@
+my_dotfiles/vim/bundle/*
+
+!my_dotfiles/vim/bundle/Vundle.vim
