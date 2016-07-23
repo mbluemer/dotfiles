@@ -7,6 +7,9 @@ export ZSH=/Users/mbluemer/.oh-my-zsh
 # time that oh-my-zsh is loaded.
 ZSH_THEME="agnoster"
 
+#Supposed to prevent homebrew from collecting analytics
+HOMEBREW_NO_ANALYTICS=1
+
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
 

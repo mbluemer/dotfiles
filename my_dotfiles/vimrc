@@ -14,6 +14,13 @@
 " This must stay first
 set nocompatible
 
+" Enable file type detection and do language-dependent indenting.
+filetype plugin indent on
+
+" Make sure encoding is always utf 8
+set encoding=utf-8
+set fileencoding=utf-8
+
 " Causes vim to source from any directory you run vim from
 " if there's a vimrc available
 " Setting secure restricts commands in non-default vimrc files
@@ -22,9 +29,6 @@ set secure
 
 " Change runtime path for Pathogen
 execute pathogen#infect()
-
-" Set the mapleader
-let mapleader = ","
 
 " Fix the backspace key
 set backspace=indent,eol,start
@@ -36,9 +40,6 @@ colorscheme solarized
 
 " Set highlight for line that cursor is on
 set cursorline
-
-" Enable file type detection and do language-dependent indenting.
-filetype plugin indent on
 
 " Set line numbering
 set number
@@ -61,6 +62,9 @@ set wrap
 set visualbell
 set t_vb=
 
+" Set the mapleader
+let mapleader = ","
+
 " For sake of practice I'm going to go ahead and remove the arrow keys
 noremap <Up> <NOP>
 noremap <Down> <NOP>
@@ -70,3 +74,21 @@ noremap <Right> <NOP>
 " Here are some mappings for vimwiki
 noremap <leader>gl :VimwikiDiaryGenerateLinks
 noremap <leader>da :r! date +"\%Y-\%m-\%d \%H:\%M:\%S"<ESC>0=j  
+
+" -------------- Time to Make the Change to Vundle ---------------- "
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+
+" Let Vundle manage Vundle, required
+Plugin 'VundleVim/Vundle.vim'
+
+Plugin 'altercation/vim-colors-solarized'
+Plugin 'vimwiki/vimwiki'
+Plugin 'scrooloose/nerdtree'
+Plugin 'vim-scripts/L9'
+Plugin 'vim-scripts/FuzzyFinder'
+Plugin 'tpope/vim-surround'
+
+" All plugins must be added before this line, required
+call vundle#end()
