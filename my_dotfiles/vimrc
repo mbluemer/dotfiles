@@ -1,13 +1,14 @@
 " Time to take this bad boy back to the basics
 "
 " Author: Mark Bluemer
-" Contributions taken from:
+" Contributions borrowed from:
 " * Ben Orenstein
 " * Amir Salihefendic
 " * Mathias Bynens
 " * Alexey Shmalko 
+" * Feferico Ramirez
 "
-" Last change: May 12 2016
+" Last change: July 23 2016
 
 
 " Use Vim settings rather than Vi settings
@@ -83,12 +84,24 @@ call vundle#begin()
 " Let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 
+" Globally useful plugins
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'vimwiki/vimwiki'
 Plugin 'scrooloose/nerdtree'
 Plugin 'vim-scripts/L9'
 Plugin 'vim-scripts/FuzzyFinder'
 Plugin 'tpope/vim-surround'
+Plugin 'Valloric/YouCompleteMe'
+
+" Plugins for Web Development
+Plugin 'Shutnik/jshint2.vim'
+Plugin 'skammer/vim-css-color'
+Plugin 'jelera/vim-javascript-syntax'
+Plugin 'pangloss/vim-javascript'
+
 
 " All plugins must be added before this line, required
 call vundle#end()
+
+" run JSHint when a file with a .js extension is saved
+autocmd BufWritePost *.js silent :JSHint
