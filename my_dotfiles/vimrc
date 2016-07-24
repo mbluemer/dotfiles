@@ -76,6 +76,14 @@ noremap <Right> <NOP>
 noremap <leader>gl :VimwikiDiaryGenerateLinks
 noremap <leader>da :r! date +"\%Y-\%m-\%d \%H:\%M:\%S"<ESC>0=j  
 
+" If no files are specified automatically open Nerdtree
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+" Lets make nerdtree easier to get to
+noremap <leader>t :NERDTreeToggle<CR>
+" Also close vim when nerdtree is the only thing left
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
 " -------------- Time to Make the Change to Vundle ---------------- "
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
