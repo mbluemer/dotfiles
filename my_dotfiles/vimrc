@@ -119,4 +119,4 @@ call vundle#end()
 autocmd BufWritePost *.js silent :JSHint
 
 " For YCM certain configuration files should be ignored
-let g:ycm_extra_conf_globlist = ['~/code/c++']
+let g:ycm_extra_conf_globlist = ['~/code/c++/*']
