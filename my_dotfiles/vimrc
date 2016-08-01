@@ -103,6 +103,7 @@ Plugin 'vim-scripts/L9'
 Plugin 'vim-scripts/FuzzyFinder'
 Plugin 'tpope/vim-surround'
 Plugin 'Valloric/YouCompleteMe'
+Plugin 'rdnetto/YCM-Generator'
 
 " Plugins for Web Development
 Plugin 'Shutnik/jshint2.vim'
@@ -116,3 +117,6 @@ call vundle#end()
 
 " run JSHint when a file with a .js extension is saved
 autocmd BufWritePost *.js silent :JSHint
+
+" For YCM certain configuration files should be ignored
+let g:ycm_extra_conf_globlist = ['~/code/c++']
