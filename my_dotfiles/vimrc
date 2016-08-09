@@ -53,8 +53,8 @@ set list
 set expandtab
 
 " 1 tab == 4 spaces
-set shiftwidth=4
-set tabstop=4
+set shiftwidth=2
+set tabstop=2
 
 " wrap lines
 set wrap
@@ -110,6 +110,8 @@ Plugin 'Shutnik/jshint2.vim'
 Plugin 'skammer/vim-css-color'
 Plugin 'jelera/vim-javascript-syntax'
 Plugin 'pangloss/vim-javascript'
+Plugin 'mattn/emmet-vim'
+Plugin 'Townk/vim-autoclose'
 
 
 " All plugins must be added before this line, required
