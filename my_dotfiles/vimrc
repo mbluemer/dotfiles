@@ -72,6 +72,9 @@ noremap <Down> <NOP>
 noremap <Left> <NOP>
 noremap <Right> <NOP>
 
+" Set spellcheck for markdown files
+autocmd BufRead,BufNewFile *.md setlocal spell
+
 " Here are some mappings for vimwiki
 noremap <leader>gl :VimwikiDiaryGenerateLinks
 noremap <leader>da :r! date +"\%Y-\%m-\%d \%H:\%M:\%S"<ESC>0=j  
@@ -107,7 +110,6 @@ Plugin 'rdnetto/YCM-Generator'
 
 " Plugins for Web Development
 Plugin 'Shutnik/jshint2.vim'
-Plugin 'skammer/vim-css-color'
 Plugin 'jelera/vim-javascript-syntax'
 Plugin 'pangloss/vim-javascript'
 Plugin 'mattn/emmet-vim'
