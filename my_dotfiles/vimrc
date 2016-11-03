@@ -37,7 +37,7 @@ set backspace=indent,eol,start
 " Switch syntax highlighting on
 syntax enable
 set background=dark
-colorscheme solarized
+colorscheme Tomorrow-Night-Eighties
 
 " Set highlight for line that cursor is on
 set cursorline
@@ -99,7 +99,6 @@ call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 
 " Globally useful plugins
-Plugin 'altercation/vim-colors-solarized'
 Plugin 'vimwiki/vimwiki'
 Plugin 'scrooloose/nerdtree'
 Plugin 'vim-scripts/L9'
