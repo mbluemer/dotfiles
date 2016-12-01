@@ -107,6 +107,7 @@ Plugin 'vim-syntastic/syntastic'
 " Plugins for Web Development
 Plugin 'pangloss/vim-javascript'
 Plugin 'mattn/emmet-vim'
+"Plugin 'mtscout6/syntastic-local-eslint.vim'
 
 " All plugins must be added before this line, required
 call vundle#end()
@@ -123,3 +124,14 @@ let g:syntastic_check_on_wq = 0
 
 let g:syntastic_javascript_checkers = ['eslint']
 
+au FileType javascript :call SetLocalEslint()
+fun! SetLocalEslint()
+if (!exists('g:syntastic_eslint_path'))
+  let s:lcd = fnameescape(getcwd())
+  silent! exec "lcd" expand('%:p:h')
+  let s:eslint_path = system('PATH=$(npm bin):$PATH && npm-which eslint')
+  exec "lcd" s:lcd
+  let g:syntastic_eslint_path = substitute(s:eslint_path, '^\n*\s*\(.\{-}\)\n*\s*$', '\1', '')
+endif
+let b:syntastic_javascript_eslint_exec = g:syntastic_eslint_path
+endfun
