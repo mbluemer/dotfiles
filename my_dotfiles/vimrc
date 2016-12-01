@@ -101,27 +101,12 @@ Plugin 'VundleVim/Vundle.vim'
 " Globally useful plugins
 Plugin 'vimwiki/vimwiki'
 Plugin 'scrooloose/nerdtree'
-Plugin 'vim-scripts/L9'
-Plugin 'vim-scripts/FuzzyFinder'
-Plugin 'tpope/vim-surround'
-Plugin 'Valloric/YouCompleteMe'
-Plugin 'rdnetto/YCM-Generator'
+Plugin 'Townk/vim-autoclose'
 
 " Plugins for Web Development
-Plugin 'Shutnik/jshint2.vim'
-Plugin 'jelera/vim-javascript-syntax'
 Plugin 'pangloss/vim-javascript'
 Plugin 'mattn/emmet-vim'
-Plugin 'Townk/vim-autoclose'
-Plugin 'leafgarland/typescript-vim'
-Plugin 'HerringtonDarkholme/yats.vim'
-
 
 " All plugins must be added before this line, required
 call vundle#end()
 
-" run JSHint when a file with a .js extension is saved
-autocmd BufWritePost *.js silent :JSHint
-
-" For YCM certain configuration files should be ignored
-let g:ycm_extra_conf_globlist = ['~/code/c++/*']
