@@ -107,6 +107,7 @@ Plugin 'vim-syntastic/syntastic'
 " Plugins for Web Development
 Plugin 'pangloss/vim-javascript'
 Plugin 'mattn/emmet-vim'
+Plugin 'mxw/vim-jsx'
 "Plugin 'mtscout6/syntastic-local-eslint.vim'
 
 " All plugins must be added before this line, required
