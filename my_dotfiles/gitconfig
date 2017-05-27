@@ -22,9 +22,11 @@
 	changed = green
 	untracked = cyan
 [user]
-	name = Mark Bluemer
+	name = mbluemer
 	email = bluemer.mark@gmail.com
 [filter "lfs"]
 	clean = git-lfs clean %f
 	smudge = git-lfs smudge %f
 	required = true
+[credential]
+	helper = osxkeychain
