@@ -5,10 +5,12 @@ export ZSH=/Users/mbluemer/.oh-my-zsh
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
-ZSH_THEME="theunraveler"
+ZSH_THEME="agnoster"
 
 #Supposed to prevent homebrew from collecting analytics
 HOMEBREW_NO_ANALYTICS=1
+
+DEFAULT_USER="mbluemer"
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
