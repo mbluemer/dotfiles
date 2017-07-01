@@ -1,4 +1,0 @@
-let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =2
-let g:netrw_dirhist_1='/Users/markbluemer/code/dotfiles/my_dotfiles'
-let g:netrw_dirhist_2='/Users/mbluemer/.oh-my-zsh'
