@@ -28,16 +28,11 @@ set fileencoding=utf-8
 set exrc
 set secure
 
-" Change runtime path for Pathogen
-execute pathogen#infect()
-
 " Fix the backspace key
 set backspace=indent,eol,start
 
 " Switch syntax highlighting on
 syntax enable
-set background=dark
-colorscheme solarized
 
 " Set highlight for line that cursor is on
 set cursorline
