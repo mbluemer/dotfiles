@@ -8,9 +8,14 @@
 - link:
     ~/.dotfiles: ''
     ~/.shell:
+    ~/.tmux.conf:
     ~/.vim:
     ~/.vimrc:
     ~/.zshrc:
 
 - shell:
-  - [git submodule update --init --recursive, Installing submodules]
+    - [git submodule update --init --recursive, Installing submodules]
+    - 
+        command: homebrew/install
+        stdin: true
+        stdout: true

@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+# If we're on a Mac, let's install and setup homebrew.
+if [ "$(uname -s)" == "Darwin" ]
+then
+  echo "  Checking for Homebrew. "
+  # Check for Homebrew
+  if test ! $(which brew)
+  then
+    echo "  Installing Homebrew for you. "
+    ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+  else
+    echo " Homebrew already installed. "
+  fi
+
+  echo " Running dependency installation."
+  
+  brew tap homebrew/bundle
+  brew bundle
+fi
