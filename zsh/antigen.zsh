@@ -12,6 +12,12 @@ antigen bundle command-not-found
 # Syntax highlighting bundle.
 antigen bundle zsh-users/zsh-syntax-highlighting
 
+# Fish-like auto suggestions
+antigen bundle zsh-users/zsh-autosuggestions
+
+# Extra zsh completions
+antigen bundle zsh-users/zsh-completions
+
 # Load the theme.
 antigen theme robbyrussell
 
