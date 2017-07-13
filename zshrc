@@ -1,3 +1,3 @@
 # Aliases
-source ~/.shell/aliases.sh
 source ~/.zsh/antigen.zsh
+source ~/.shell/aliases.sh
