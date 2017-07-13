@@ -1,0 +1,19 @@
+# Compiled Source #
+###################
+*.class
+*.pyc
+*.o
+
+# Temporary Editing Files #
+###########################
+*.swp
+
+# Logs and Databases #
+######################
+*.log
+*.sql
+*.sqlite
+
+# OS Generated Files #
+######################
+*.DS_Store
