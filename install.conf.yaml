@@ -19,6 +19,6 @@
 - shell:
     - [git submodule update --init --recursive, Installing submodules]
     - 
-        command: homebrew/install
+        command: homebrew/install || true
         stdin: true
         stdout: true
