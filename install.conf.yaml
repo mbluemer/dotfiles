@@ -1,0 +1,24 @@
+- defaults:
+    link:
+        create: true
+        relink: true
+
+- clean: ['~']
+
+- link:
+    ~/.dotfiles: ''
+    ~/.gitconfig:
+    ~/.gitignore_global:
+    ~/.shell:
+    ~/.tmux.conf:
+    ~/.vim:
+    ~/.vimrc:
+    ~/.zsh:
+    ~/.zshrc:
+
+- shell:
+    - [git submodule update --init --recursive, Installing submodules]
+    - 
+        command: homebrew/install
+        stdin: true
+        stdout: true

@@ -1,3 +1,2 @@
-my_dotfiles/vim/bundle/*
-
-!my_dotfiles/vim/bundle/Vundle.vim
+/vim/bundle/*
+!/vim/bundle/Vundle.vim
