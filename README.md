@@ -1,0 +1,13 @@
+# dotfiles
+The personal dotfiles of Mark Bluemer
+
+## How to Use
+It's stupid simple:
+```sh
+git clone https://github.com/mbluemer/dotfiles.git
+cd dotfiles
+./install
+```
+
+## TODO
+- [ ] Break out system based files (right now just set up for MacOS
