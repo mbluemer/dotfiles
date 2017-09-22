@@ -81,9 +81,11 @@ autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 noremap <leader>t :NERDTreeToggle<CR>
 " Also close vim when nerdtree is the only thing left
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-" Let's change window switching to make things easier
+" Let's make split switching easier
 noremap  <C-h> <C-w>h
 noremap  <C-l> <C-w>l
+noremap  <C-j> <C-w>j
+noremap  <C-k> <C-w>k
 
 " -------------- Time to Make the Change to Vundle ---------------- "
 " set the runtime path to include Vundle and initialize
