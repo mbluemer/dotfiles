@@ -81,9 +81,11 @@ autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 noremap <leader>t :NERDTreeToggle<CR>
 " Also close vim when nerdtree is the only thing left
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-" Let's change window switching to make things easier
+" Let's make split switching easier
 noremap  <C-h> <C-w>h
 noremap  <C-l> <C-w>l
+noremap  <C-j> <C-w>j
+noremap  <C-k> <C-w>k
 
 " -------------- Time to Make the Change to Vundle ---------------- "
 " set the runtime path to include Vundle and initialize
@@ -97,7 +99,7 @@ Plugin 'VundleVim/Vundle.vim'
 Plugin 'vimwiki/vimwiki'
 Plugin 'scrooloose/nerdtree'
 Plugin 'Townk/vim-autoclose'
-Plugin 'vim-syntastic/syntastic'
+Plugin 'w0rp/ale'
 
 " Plugins for Web Development
 Plugin 'pangloss/vim-javascript'
@@ -106,27 +108,3 @@ Plugin 'mxw/vim-jsx'
 
 " All plugins must be added before this line, required
 call vundle#end()
-
-" Syntastic linter rules
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-
-let g:syntastic_javascript_checkers = ['eslint']
-
-au FileType javascript :call SetLocalEslint()
-fun! SetLocalEslint()
-if (!exists('g:syntastic_eslint_path'))
-  let s:lcd = fnameescape(getcwd())
-  silent! exec "lcd" expand('%:p:h')
-  let s:eslint_path = system('PATH=$(npm bin):$PATH && npm-which eslint')
-  exec "lcd" s:lcd
-  let g:syntastic_eslint_path = substitute(s:eslint_path, '^\n*\s*\(.\{-}\)\n*\s*$', '\1', '')
-endif
-let b:syntastic_javascript_eslint_exec = g:syntastic_eslint_path
-endfun
