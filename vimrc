@@ -58,6 +58,8 @@ set wrap
 set visualbell
 set t_vb=
 
+cmap w!! w !sudo tee >/dev/null %
+
 " Set the mapleader
 let mapleader = ","
 
