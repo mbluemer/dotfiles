@@ -61,12 +61,6 @@ set t_vb=
 " Set the mapleader
 let mapleader = ","
 
-" For sake of practice I'm going to go ahead and remove the arrow keys
-noremap <Up> <NOP>
-noremap <Down> <NOP>
-noremap <Left> <NOP>
-noremap <Right> <NOP>
-
 " Set spellcheck for markdown files
 autocmd BufRead,BufNewFile *.md setlocal spell
 
