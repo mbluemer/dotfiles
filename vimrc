@@ -48,8 +48,8 @@ set list
 set expandtab
 
 " 1 tab == 4 spaces
-set shiftwidth=2
-set tabstop=2
+set shiftwidth=4
+set tabstop=4
 
 " wrap lines
 set wrap
@@ -77,11 +77,16 @@ autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 noremap <leader>t :NERDTreeToggle<CR>
 " Also close vim when nerdtree is the only thing left
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+" Have NERDTree ignore certain files
+let NERDTreeIgnore = ['\.pyc$']
 " Let's make split switching easier
 noremap  <C-h> <C-w>h
 noremap  <C-l> <C-w>l
 noremap  <C-j> <C-w>j
 noremap  <C-k> <C-w>k
+
+" Enable folding with spacebar
+nnoremap <space> za
 
 " -------------- Time to Make the Change to Vundle ---------------- "
 " set the runtime path to include Vundle and initialize
@@ -96,6 +101,7 @@ Plugin 'vimwiki/vimwiki'
 Plugin 'scrooloose/nerdtree'
 Plugin 'Townk/vim-autoclose'
 Plugin 'w0rp/ale'
+Plugin 'tmhedberg/simpylfold'
 
 " Plugins for Web Development
 Plugin 'pangloss/vim-javascript'
@@ -104,3 +110,5 @@ Plugin 'mxw/vim-jsx'
 
 " All plugins must be added before this line, required
 call vundle#end()
+
+let g:SimpylFold_docstring_preview = 1
