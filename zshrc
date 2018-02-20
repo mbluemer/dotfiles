@@ -9,3 +9,5 @@ fi
 
 # Add local binaries to PATH
 export PATH=/home/$USER/.local/bin:$PATH
+# Add cargo bin to PATH
+export PATH=~/.cargo/bin:$PATH
