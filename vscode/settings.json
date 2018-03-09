@@ -1,0 +1,5 @@
+{
+    "workbench.colorTheme": "Solarized Dark",
+    "vim.useCtrlKeys": false,
+    "editor.renderWhitespace": "boundary"
+}
