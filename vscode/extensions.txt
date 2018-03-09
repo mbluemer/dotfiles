@@ -1,0 +1,5 @@
+dbaeumer.vscode-eslint
+ms-python.python
+ms-vscode.csharp
+vscodevim.vim
+zhuangtongfa.Material-theme
