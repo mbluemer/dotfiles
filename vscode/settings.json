@@ -1,5 +1,17 @@
 {
-    "workbench.colorTheme": "Solarized Dark",
+    "workbench.colorTheme": "Monokai",
     "vim.useCtrlKeys": false,
-    "editor.renderWhitespace": "boundary"
+    "editor.renderWhitespace": "boundary",
+    "window.zoomLevel": 0,
+    "gitlens.advanced.messages": {
+        "suppressCommitHasNoPreviousCommitWarning": false,
+        "suppressCommitNotFoundWarning": false,
+        "suppressFileNotUnderSourceControlWarning": false,
+        "suppressGitVersionWarning": false,
+        "suppressLineUncommittedWarning": false,
+        "suppressNoRepositoryWarning": false,
+        "suppressResultsExplorerNotice": true
+    },
+    "explorer.confirmDelete": false,
+    "files.eol": "\n"
 }

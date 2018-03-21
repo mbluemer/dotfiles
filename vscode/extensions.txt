@@ -1,5 +1,11 @@
+asvetliakov.snapshot-tools
 dbaeumer.vscode-eslint
+eamodio.gitlens
+formulahendry.auto-close-tag
+karyfoundation.nearley
 ms-python.python
 ms-vscode.csharp
+nickdodd79.gulptasks
+steditor.line-endings
 vscodevim.vim
 zhuangtongfa.Material-theme
