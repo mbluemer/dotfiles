@@ -6,9 +6,6 @@
 - clean: ['~']
 
 - link:
-    ~/.dotfiles: ''
-    ~/.gitconfig:
-    ~/.gitignore_global:
     ~/.shell:
     ~/.tmux.conf:
     ~/.vim:
@@ -18,7 +15,3 @@
 
 - shell:
     - [git submodule update --init --recursive, Installing submodules]
-    - 
-        command: homebrew/install || true
-        stdin: true
-        stdout: true
