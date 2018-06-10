@@ -48,8 +48,8 @@ set list
 set expandtab
 
 " 1 tab == 4 spaces
-set shiftwidth=4
-set tabstop=4
+set shiftwidth=2
+set tabstop=2
 
 " wrap lines
 set wrap
@@ -107,6 +107,9 @@ Plugin 'tmhedberg/simpylfold'
 Plugin 'pangloss/vim-javascript'
 Plugin 'mattn/emmet-vim'
 Plugin 'mxw/vim-jsx'
+
+Plugin 'elmcast/elm-vim'
+Plugin 'leafgarland/typescript-vim'
 
 " All plugins must be added before this line, required
 call vundle#end()
