@@ -6,9 +6,6 @@
 - clean: ['~']
 
 - link:
-    ~/.dotfiles: ''
-    ~/.gitconfig:
-    ~/.gitignore_global:
     ~/.shell:
     ~/.tmux.conf:
     ~/.vim:
@@ -16,4 +13,3 @@
     ~/.zprezto:
     ~/.zshrc:
     ~/.config/nvim: nvim
-
