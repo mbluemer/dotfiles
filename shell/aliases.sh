@@ -1,5 +1,6 @@
 #### GENERAL
 alias cl="clear"
+alias la="ls -al"
 
 # Protect against overwriting
 alias cp="cp -i"
