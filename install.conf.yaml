@@ -12,6 +12,6 @@
     ~/.vimrc:
     ~/.antigen:
     ~/.zshrc:
-    ~/.config/nvim: nvim
+    ~/.config/qutebrowser:
 - shell:
   - [git submodule update --init --recursive, Installing submodules]
