@@ -2,6 +2,8 @@
 alias cl="clear"
 alias la="ls -al"
 
+alias vim="nvim" # Yup.
+
 # Protect against overwriting
 alias cp="cp -i"
 alias mv="mv -i"

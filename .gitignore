@@ -1,5 +1,4 @@
-/vim/bundle/*
-!/vim/bundle/Vundle.vim
+/nvim/bundle
 
 # Unsure what these are
 *.zwc
