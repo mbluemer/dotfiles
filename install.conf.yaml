@@ -13,5 +13,6 @@
     ~/.antigen:
     ~/.zshrc:
     ~/.config/qutebrowser:
+    ~/.i3:
 - shell:
   - [git submodule update --init --recursive, Installing submodules]
