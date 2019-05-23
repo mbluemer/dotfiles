@@ -6,7 +6,7 @@ export PATH=/home/$USER/.local/bin:$PATH
 # Add cargo bin to PATH
 export PATH=~/.cargo/bin:$PATH
 
-source ~/.antigen/antigen.zsh
+source ~/.config/antigen/antigen.zsh
 
 source ~/.shell/antigen.sh
 source ~/.shell/functions.sh

@@ -3,6 +3,7 @@ alias cl="clear"
 alias la="ls -al"
 
 alias vim="nvim" # Yup.
+alias wiki="nvim ~/vimwiki/index.md"
 
 # Protect against overwriting
 alias cp="cp -i"

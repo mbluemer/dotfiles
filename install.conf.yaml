@@ -8,7 +8,7 @@
 - link:
     ~/.shell:
     ~/.tmux.conf:
-    ~/.antigen:
+    ~/.config/antigen:
     ~/.zshrc:
     ~/.config/qutebrowser:
     ~/.config/nvim:

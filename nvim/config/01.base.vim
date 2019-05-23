@@ -40,6 +40,8 @@ set tabstop=4
 
 " wrap lines
 set wrap
+set textwidth=80
+set formatoptions+=l
 
 " Remove that annoying beeping and flashing
 set visualbell

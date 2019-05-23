@@ -142,13 +142,13 @@ bindsym $mod+Ctrl+Left workspace prev
 # something like: set $ws1 1:mail
 #                 set $ws2 2:
 set $ws1 ""
-set $ws2 2
+set $ws2 ""
 set $ws3 3
 set $ws4 4
 set $ws5 5
 set $ws6 6
 set $ws7 7
-set $ws8 8
+set $ws8 ""
 
 # switch to workspace
 bindsym $mod+1 workspace $ws1
@@ -329,7 +329,7 @@ bar {
 
 	bindsym button4 nop
 	bindsym button5 nop
-#   font xft:URWGothic-Book 11
+    font xft:Inconsolata Nerd Font Mono 14
 	strip_workspace_numbers yes
 
     colors {
