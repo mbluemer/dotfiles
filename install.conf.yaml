@@ -14,6 +14,7 @@
     ~/.config/nvim:
     ~/.vimrc: nvim/init.vim
     ~/.i3:
+    ~/.Xmodmap:
 - shell:
   - [git submodule update --init --recursive, Installing submodules]
   - ['curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh > installer.sh && sh ./installer.sh ~/.cache/dein && rm installer.sh', Installing dein]
