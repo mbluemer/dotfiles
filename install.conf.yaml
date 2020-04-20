@@ -12,6 +12,7 @@
     ~/.zshrc:
     ~/.config/qutebrowser:
     ~/.config/nvim:
+    ~/.config/alacritty:
     ~/.vimrc: nvim/init.vim
     ~/.i3:
     ~/.Xmodmap:
