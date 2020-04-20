@@ -4,7 +4,7 @@ The personal dotfiles of Mark Bluemer
 ## How to Use
 It's stupid simple:
 ```sh
-git clone https://github.com/mbluemer/dotfiles.git
+git clone --recursive https://github.com/mbluemer/dotfiles.git
 cd dotfiles
 ./install
 ```
