@@ -13,6 +13,8 @@
     ~/.config/qutebrowser:
     ~/.config/nvim:
     ~/.config/alacritty:
+    ~/.config/skhd:
+    ~/.config/yabai:
     ~/.vimrc: nvim/init.vim
     ~/.i3:
     ~/.Xmodmap:
