@@ -1,90 +1,32 @@
-#  NOTE(koekeishiya): A list of all built-in modifier and literal keywords can
-#                     be found at https://github.com/koekeishiya/skhd/issues/1
-#
-#                     A hotkey is written according to the following rules:
-#
-#                       hotkey       = <mode> '<' <action> | <action>
-#
-#                       mode         = 'name of mode' | <mode> ',' <mode>
-#
-#                       action       = <keysym> '[' <proc_map_lst> ']' | <keysym> '->' '[' <proc_map_lst> ']'
-#                                      <keysym> ':' <command>          | <keysym> '->' ':' <command>
-#                                      <keysym> ';' <mode>             | <keysym> '->' ';' <mode>
-#
-#                       keysym       = <mod> '-' <key> | <key>
-#
-#                       mod          = 'modifier keyword' | <mod> '+' <mod>
-#
-#                       key          = <literal> | <keycode>
-#
-#                       literal      = 'single letter or built-in keyword'
-#
-#                       keycode      = 'apple keyboard kVK_<Key> values (0x3C)'
-#
-#                       proc_map_lst = * <proc_map>
-#
-#                       proc_map     = <string> ':' <command> | <string>     '~' |
-#                                      '*'      ':' <command> | '*'          '~'
-#
-#                       string       = '"' 'sequence of characters' '"'
-#
-#                       command      = command is executed through '$SHELL -c' and
-#                                      follows valid shell syntax. if the $SHELL environment
-#                                      variable is not set, it will default to '/bin/bash'.
-#                                      when bash is used, the ';' delimeter can be specified
-#                                      to chain commands.
-#
-#                                      to allow a command to extend into multiple lines,
-#                                      prepend '\' at the end of the previous line.
-#
-#                                      an EOL character signifies the end of the bind.
-#
-#                       ->           = keypress is not consumed by skhd
-#
-#                       *            = matches every application not specified in <proc_map_lst>
-#
-#                       ~            = application is unbound and keypress is forwarded per usual, when specified in a <proc_map>
-#
-#  NOTE(koekeishiya): A mode is declared according to the following rules:
-#
-#                       mode_decl = '::' <name> '@' ':' <command> | '::' <name> ':' <command> |
-#                                   '::' <name> '@'               | '::' <name>
-#
-#                       name      = desired name for this mode,
-#
-#                       @         = capture keypresses regardless of being bound to an action
-#
-#                       command   = command is executed through '$SHELL -c' and
-#                                   follows valid shell syntax. if the $SHELL environment
-#                                   variable is not set, it will default to '/bin/bash'.
-#                                   when bash is used, the ';' delimeter can be specified
-#                                   to chain commands.
-#
-#                                   to allow a command to extend into multiple lines,
-#                                   prepend '\' at the end of the previous line.
-#
+# Open essential applications
+alt - return : /Applications/alacritty.app/Contents/MacOS/alacritty
+alt - i : /Applications/Firefox\ Developer\ Edition.app/Contents/MacOS/firefox
 
-cmd - return : /Applications/alacritty.app/Contents/MacOS/alacritty
-
-# Switch window focus
+# Navigate windows
 alt - h : yabai -m window --focus west
 alt - j : yabai -m window --focus south
 alt - k : yabai -m window --focus north
 alt - l : yabai -m window --focus east
 alt - u : yabai -m window --focus recent
 
-# Move windows around
-alt + cmd - h : yabai -m window --warp west
-alt + cmd - j : yabai -m window --warp south
-alt + cmd - k : yabai -m window --warp north
-alt + cmd - l : yabai -m window --warp east
-
-shift + cmd - 1 : yabai -m window --space 1; yabai -m space --focus 1
-shift + cmd - l : yabai -m window --space next; yabai -m space --focus next
-shift + cmd - h : yabai -m window --space prev; yabai -m space --focus prev
-
+# Navigate spaces
 alt - 1 : yabai -m space --focus 1
 alt - 2 : yabai -m space --focus 2
 alt - 3 : yabai -m space --focus 3
+alt - 4 : yabai -m space --focus 4
+alt - o : yabai -m space --focus recent
 
+# Move windows within a space
+shift + alt - h : yabai -m window --warp west
+shift + alt - j : yabai -m window --warp south
+shift + alt - k : yabai -m window --warp north
+shift + alt - l : yabai -m window --warp east
+
+# Move windows between spaces
+shift + alt - 1 : yabai -m window --space 1; yabai -m space --focus 1
+shift + alt - 2 : yabai -m window --space 2; yabai -m space --focus 2
+shift + alt - 3 : yabai -m window --space 3; yabai -m space --focus 3
+shift + alt - 4 : yabai -m window --space 4; yabai -m space --focus 4
+
+# Alter windows
 alt - f : yabai -m window --toggle zoom-fullscreen
