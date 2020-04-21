@@ -12,6 +12,8 @@ source ~/.shell/antigen.sh
 source ~/.shell/functions.sh
 source ~/.shell/aliases.sh
 
+source ~/.shell/lazy-load-nvm.sh
+
 # If pywal configuration has been load it up
 WAL_SEQUENCES=~/.cache/wal/sequences
 if [ -f $WAL_SEQUENCES ]; then
