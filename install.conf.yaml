@@ -16,6 +16,7 @@
     ~/.config/skhd:
     ~/.config/yabai:
     ~/.vimrc: nvim/init.vim
+    ~/.emacs.d:
     ~/.i3:
     ~/.Xmodmap:
 - shell:

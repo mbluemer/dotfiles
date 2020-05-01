@@ -1,4 +1,6 @@
 /nvim/bundle
+/emacs.d/elpa
+/emacs.d/custom-settings.el
 
 # Unsure what these are
 *.zwc
