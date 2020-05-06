@@ -25,8 +25,20 @@
   ;; Help
   "hf" '(describe-function :which-key "describe function")
   ;; Org
-  "oc" '(org-capture :which-key "org capture")
-  "oa" '(org-agenda :which-key "org agenda"))
+  "oc" '(org-capture :which-key "capture")
+  "oa" '(org-agenda :which-key "agenda")
+  "o RET" '(org-meta-return :which-key "insert")
+  "os" '(org-sort :which-key "sort")
+  "o <" '(org-promote-subtree :which-key "promote tree")
+  "o >" '(org-demote-subtree :which-key "demote tree")
+  "ok" '(org-move-subtree-up :which-key "move subtree up")
+  "oj" '(org-move-subtree-down :which-key "move subtree down")
+  "od" '(org-cut-subtree :which-key "cut subtree")
+  "oy" '(org-copy-subtree :which-key "copy subtree")
+  "op" '(org-paste-subtree :which-key "paste subtree")
+  "ot" '(org-todo :which-key "TODO")
+  ;; Insert
+  "ip" '(org-set-property :which-key "insert property"))
 
 ;; org-mode-map overrides
 (nvmap

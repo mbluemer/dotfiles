@@ -1,6 +1,7 @@
-;; EVIL 
+(setq use-package-always-ensure t)
+
+;; NAVIGATION
 (use-package evil
-  :ensure t
   :init
   (setq evil-want-keybinding nil)
   (setq evil-want-C-i-jump nil)
@@ -9,26 +10,10 @@
 
 (use-package evil-collection
   :after evil
-  :ensure t
   :config
   (evil-collection-init))
 
-(use-package evil-org
-  :ensure t
-  :after org
-  :init
-  :config
-  (add-hook 'org-mode-hook 'evil-org-mode)
-  (add-hook 'evil-org-mode-hook
-            (lambda ()
-              (evil-org-set-key-theme)))
-  (require 'evil-org-agenda)
-  (evil-org-agenda-set-keys))
-
-
-;; Helm
 (use-package helm
-  :ensure t
   :init
   (setq helm-mode-fuzzy-match t
 	helm-completion-in-region-fuzzy-match t
@@ -41,31 +26,37 @@
         helm-M-x-requires-pattern nil
         helm-ff-skip-boring-files t))
 
-;; Which key
 (use-package which-key
-  :ensure t
-  :config
-  (which-key-mode))
+  :config (which-key-mode))
 
-;; Org mode
+(use-package popwin
+  :config (popwin-mode))
+
+;; ORG
 (use-package org
-  :ensure t
   :init
-  (setq org-modules '(org-habit)))
+  (setq org-modules '(org-habit)
+	org-startup-truncated nil
+	org-blank-before-new-entry nil))
 
-;; Use General for keybindings
+(use-package evil-org
+  :after org
+  :hook (org-mode . evil-org-mode)
+  :init
+  :config
+  (add-hook 'evil-org-mode-hook
+            (lambda ()
+              (evil-org-set-key-theme)))
+  (require 'evil-org-agenda)
+  (evil-org-agenda-set-keys))
+
+;; KEYBINDINGS
 (use-package general
-  :ensure t
-  :config
-  (general-evil-setup t))
+  :config (general-evil-setup t))
 
-;; Monokai theme
+;; THEME
 (use-package monokai-theme
-  :ensure t
-  :config
-  (load-theme 'monokai t))
+  :config (load-theme 'monokai t))
 
 (use-package powerline
-  :ensure t
-  :config
-  (powerline-default-theme))
+  :config (powerline-default-theme))
