@@ -16,9 +16,16 @@
     ~/.config/skhd:
     ~/.config/yabai:
     ~/.vimrc: nvim/init.vim
-    ~/.emacs.d:
+    ~/.doom.d:
     ~/.i3:
     ~/.Xmodmap:
 - shell:
-  - [git submodule update --init --recursive, Installing submodules]
+  - ['git submodule update --init --recursive', Installing submodules]
   - ['curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh > installer.sh && sh ./installer.sh ~/.cache/dein && rm installer.sh', Installing dein]
+  - ['git clone --depth 1 https://github.com/hlissner/doom-emacs ~/.emacs.d', Cloning Doom Emacs]
+  -
+    command: '~/.emacs.d/bin/doom install'
+    stdin: true
+    stdout: true
+    description: Install Doom Emacs
+  - ['~/.emacs.d/bin/doom sync', Sync Doom Emacs]
