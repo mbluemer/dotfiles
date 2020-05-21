@@ -1,0 +1,20 @@
+tab-item tab-closebox {
+  display: none;
+}
+
+.newtab-button-box {
+  display: none;
+}
+#tabbar {
+  bottom: 0 !important; /* Eliminate dead space on bottom */
+}
+
+tab-item.active {
+  background-color: #193B99;
+}
+
+tab-item:not(.pinned) tab-favicon {
+  visibility: hidden;
+  margin-left: -18px;
+}
+
