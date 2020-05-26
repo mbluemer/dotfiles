@@ -5,6 +5,8 @@ export EDITOR="$VISUAL"
 export PATH=/home/$USER/.local/bin:$PATH
 # Add cargo bin to PATH
 export PATH=~/.cargo/bin:$PATH
+# Add python3 bin to PATH
+export PATH=~/Library/Python/3.7/bin:$PATH
 
 source ~/.config/antigen/antigen.zsh
 
