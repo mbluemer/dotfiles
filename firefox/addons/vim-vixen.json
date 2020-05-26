@@ -74,7 +74,8 @@
       "yt": "https://www.youtube.com/results?search_query={}",
       "n": "https://www.netflix.com/search?q={}",
       "r":"https://www.reddit.com/r/{}",
-      "rs":"https://www.reddit.com/search?q={}"
+      "rs":"https://www.reddit.com/search?q={}",
+      "hn": "https://news.ycombinator.com/best{}"
     }
   },
   "properties": {
