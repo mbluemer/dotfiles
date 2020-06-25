@@ -19,3 +19,6 @@ alias gc="git commit -m"
 alias gpull="git pull"
 alias gpush="git push"
 alias gpom="git push origin master"
+
+#### Ruby
+alias be="bundle exec"
