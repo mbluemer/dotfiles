@@ -5,6 +5,9 @@
 /emacs.d/bookmarks
 /emacs.d/auto-save-list
 /emacs.d/custom-settings.el
+/fish/completions
+/fish/functions
+/fish/fish_variables
 
 # Unsure what these are
 *.zwc

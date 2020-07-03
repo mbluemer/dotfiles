@@ -15,6 +15,7 @@
     ~/.config/alacritty:
     ~/.config/skhd:
     ~/.config/yabai:
+    ~/.config/fish:
     ~/.vimrc: nvim/init.vim
     ~/.doom.d:
     ~/.i3:
