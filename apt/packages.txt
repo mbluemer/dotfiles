@@ -1,0 +1,10 @@
+fish
+tmux
+xclip
+neovim
+emacs
+tldr
+thefuck
+bat
+jq
+fzf
