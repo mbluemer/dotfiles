@@ -20,5 +20,13 @@ alias gpull="git pull"
 alias gpush="git push"
 alias gpom="git push origin master"
 
+#### Rust
+alias cr="cargo run"
+
 #### Ruby
 alias be="bundle exec"
+
+#### Other random
+if type -q $fdfind
+    alias fd="fdfind"
+end
