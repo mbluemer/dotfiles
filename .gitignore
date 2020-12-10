@@ -11,7 +11,6 @@
 /fish/conf.d/
 !/fish/conf.d/01_path.fish
 !/fish/conf.d/aliases.fish
-!/fish/conf.d/work-aliases.fish
 
 # Unsure what these are
 *.zwc
