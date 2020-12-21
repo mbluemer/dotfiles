@@ -11,6 +11,8 @@
 /fish/conf.d/
 !/fish/conf.d/01_path.fish
 !/fish/conf.d/aliases.fish
+/emacs.d/
+!/emacs.d/init.el
 
 # Unsure what these are
 *.zwc
