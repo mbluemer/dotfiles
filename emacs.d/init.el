@@ -33,6 +33,13 @@
 (tool-bar-mode -1)
 (menu-bar-mode -1)
 
+;; Don't use tabs
+(setq-default indent-tabs-mode nil)
+(setq-default tab-width 4)
+
+;; Move autosaves so they're not constantly in the way
+(setq backup-directory-alist `(("." . "~/.saves")))
+
 ;; Enable line numbers, disable for certain modes
 (column-number-mode)
 (global-display-line-numbers-mode t)
@@ -44,6 +51,10 @@
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 
 ;; Install packages!
+(use-package exec-path-from-shell
+  :config
+  (when (memq window-system '(mac ns x))
+  (exec-path-from-shell-initialize)))
 (use-package doom-themes
   :config
   (load-theme 'doom-monokai-classic t))
@@ -64,7 +75,8 @@
     :global-prefix "C-SPC")
   (general-create-definer mb/evil-leader-key-def
     :keymaps '(normal insert visual emacs)
-    :prefix ","))
+    :prefix ","
+    :global-prefix "C-,"))
 (use-package ivy
   :config
   (ivy-mode 1))
@@ -103,6 +115,7 @@
   :config
   (evil-collection-init))
 
+(use-package ripgrep)
 (use-package projectile
   :after magit
   :diminish projectile-mode
@@ -149,19 +162,26 @@
   "w" '(save-buffer :which-key "Save current buffer"))
 
 (mb/leader-key-def
+ "p" '(projectile-command-map :which-key "Projectile commands"))
+
+(mb/leader-key-def
  "ff" '(counsel-find-file :which-key "Counsel find file")
  "fd" '(delete-file :which-key "Delete file"))
 (mb/leader-key-def
  "bb" '(counsel-ibuffer :which-key "Counsel switch buffer"))
 
 (use-package yaml-mode)
+(use-package dockerfile-mode
+  :config
+  (add-to-list 'auto-mode-alist
+	       '("Dockerfile\\'" . dockerfile-mode)))
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(yaml-mode magit helpful which-key counsel-projectile counsel projectile evil-collection evil ivy-rich ivy-posframe ivy general mode-line-bell rainbow-delimiters powerline doom-themes use-package)))
+   '(ripgrep exec-path-from-shell dockerfile-mode yaml-mode magit helpful which-key counsel-projectile counsel projectile evil-collection evil ivy-rich ivy-posframe ivy general mode-line-bell rainbow-delimiters powerline doom-themes use-package)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
