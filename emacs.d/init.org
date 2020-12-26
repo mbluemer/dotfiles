@@ -1,6 +1,6 @@
 #+TITLE: My Literate Emacs Configuration
 #+AUTHOR: Mark Bluemer
-#+PROPERTY: header-args :results silent
+#+PROPERTY: header-args :results silent :tangle yes
 
 Inspiration has been heavily borrowed from the following sources:
 - https://blog.aaronbieber.com/2015/05/24/from-vim-to-emacs-in-fourteen-days.html
@@ -8,203 +8,223 @@ Inspiration has been heavily borrowed from the following sources:
 - https://www.youtube.com/watch?v=74zOY-vgkyw&list=PLEoMzSkcN8oPH1au7H6B7bBJ4ZO7BXjSZ
 - https://emacs.stackexchange.com/a/32635
 - https://bitbucket.org/eschwab/emacs.d/src/master/
-
+- http://www.howardism.org/Technical/Emacs/orgmode-wordprocessor.html
+  
 * Startup
 
 Put any configuration here that's crucial to run during startup.
 
 ** Visual Tweaks
 
-   Get rid of all of the unnecessary fringe immediately so there's no visual stutter.
-
-#+begin_src emacs-lisp :tangle yes
-    (if (display-graphic-p)
-	(progn
-	(set-fringe-mode 10)
-	(scroll-bar-mode -1)))
-    (tooltip-mode -1)
-    (tool-bar-mode -1)
-    (menu-bar-mode -1)
+Get rid of all of the unnecessary fringe immediately so there's no visual stutter.
+#+begin_src emacs-lisp
+  (if (display-graphic-p)
+      (progn
+        (set-fringe-mode 10)
+        (scroll-bar-mode -1)))
+  (tooltip-mode -1)
+  (tool-bar-mode -1)
+  (menu-bar-mode -1)
 #+end_src
 
 ** Backup Files
 Move autosaves so they're not constantly in the way.
-#+begin_src emacs-lisp :tangle yes
-(setq backup-directory-alist `(("." . "~/.saves")))
+#+begin_src emacs-lisp
+  (setq backup-directory-alist `(("." . "~/.saves")))
 #+end_src
 
+** Font Setup
+
+#+begin_src emacs-lisp
+  (defvar mb/default-font-size 120)
+  (defvar mb/default-variable-font-size 140)
+
+  (set-face-attribute 'default nil :font "FiraCode Nerd Font Mono" :height mb/default-font-size)
+  (set-face-attribute 'fixed-pitch nil :font "FiraCode Nerd Font Mono" :height mb/default-font-size)
+  (set-face-attribute 'variable-pitch nil :font "Georgia" :height mb/default-variable-font-size :weight 'regular)
+#+end_src
 * Package Management
   
-  Require ~package.el~, the built in package manager for Emacs. This is used only indirectly through ~use-package~.
+Require ~package.el~, the built in package manager for Emacs. This is used only indirectly through ~use-package~.
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp
   (require 'package)
 #+end_src
 
 Set the default package archives to pull packages from.
 
-#+begin_src emacs-lisp :tangle yes
-(setq package-archives '(("melpa" . "http://melpa.org/packages/")
-			 ("melpa-stable" . "http://stable.melpa.org/packages/")))
+#+begin_src emacs-lisp
+  (setq package-archives '(("melpa" . "http://melpa.org/packages/")
+                           ("org" . "https://orgmode.org/elpa/")
+                           ("melpa-stable" . "http://stable.melpa.org/packages/")))
 #+end_src
 
 Set up ~use-package~ for real package management.
 
-#+begin_src emacs-lisp :tangle yes
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
+#+begin_src emacs-lisp
+  (unless (package-installed-p 'use-package)
+    (package-refresh-contents)
+    (package-install 'use-package))
 
-(eval-when-compile
-  (require 'use-package))
+  (eval-when-compile
+    (require 'use-package))
 #+end_src
 
 Make sure any packages I use get loaded if it's not yet installed.
-#+begin_src emacs-lisp :tangle yes
-(require 'use-package-ensure)
-(setq use-package-always-ensure t)
+#+begin_src emacs-lisp
+  (require 'use-package-ensure)
+  (setq use-package-always-ensure t)
 #+end_src
 
 * Core Packages
-  
 ** Setting up $PATH
    
-   When not running from terminal Emacs has some issues with $PATH.
+When not running from terminal Emacs has some issues with $PATH.
 #+begin_src emacs-lisp :tangle no
-(use-package exec-path-from-shell
-  :config
-  (when (memq window-system '(mac ns x))
-  (exec-path-from-shell-initialize)))
-#+end_src
-
-** Vim Bindings
-   
-Use Evil mode to get those sweet sweet Vim bindings. Add on ~evil-collection~ for the benefit of extra Vim keybindings wherever I go.
-#+begin_src emacs-lisp :tangle yes
-(use-package evil
-  :init
-  (setq evil-want-integration t)
-  (setq evil-want-keybinding nil)
-  (setq evil-want-C-u-scroll t)
-  :config
-  (evil-mode 1))
-(use-package evil-collection
-  :after evil
-  :ensure t
-  :config
-  (evil-collection-init))
-#+end_src
-
-Make ESC quit prompts.
-#+begin_src emacs-lisp :tangle yes
-(global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+  (use-package exec-path-from-shell
+    :config
+    (when (memq window-system '(mac ns x))
+      (exec-path-from-shell-initialize)))
 #+end_src
 
 ** Keybinding Management
    
-   Use ~general~ for defining keybindings. Create two leader combinations, one general leader key combination and the other for some specific quick vim commands.
+Use ~general~ for defining keybindings. Create two leader combinations, one general leader key combination and the other for some specific quick vim commands.
 
-#+begin_src emacs-lisp :tangle yes
-(use-package general
-  :config
-  (general-evil-setup t)
-  (general-create-definer mb/leader-key-def
-    :keymaps '(normal insert visual emacs)
-    :prefix "SPC"
-    :global-prefix "C-SPC")
-  (general-create-definer mb/evil-leader-key-def
-    :keymaps '(normal insert visual emacs)
-    :prefix ","
-    :global-prefix "C-,"))
+#+begin_src emacs-lisp
+  (use-package general
+    :config
+    (general-evil-setup t)
+    (general-create-definer mb/leader-key-def
+      :keymaps '(normal insert visual emacs)
+      :prefix "SPC"
+      :global-prefix "C-SPC")
+    (general-create-definer mb/evil-leader-key-def
+      :keymaps '(normal insert visual emacs)
+      :prefix ","
+      :global-prefix "C-,"))
 #+end_src
 
-   Use ~which-key~ to provide hints when typing keybindings.
-#+begin_src emacs-lisp :tangle yes
-(use-package which-key
-  :init (which-key-mode))
+Use ~which-key~ to provide hints when typing keybindings.
+#+begin_src emacs-lisp
+  (use-package which-key
+    :init (which-key-mode))
+#+end_src
+
+** Evil Mode
+   
+Use Evil mode to get those sweet sweet Vim bindings. Add on ~evil-collection~ for the benefit of extra Vim keybindings wherever I go.
+#+begin_src emacs-lisp
+  (use-package evil
+    :init
+    (setq evil-want-integration t)
+    (setq evil-want-keybinding nil)
+    (setq evil-want-C-u-scroll t)
+    :config
+    (evil-mode 1))
+  (use-package evil-collection
+    :after evil
+    :ensure t
+    :config
+    (evil-collection-init))
+#+end_src
+
+Make ESC quit prompts.
+#+begin_src emacs-lisp
+  (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+#+end_src
+
+*** Keybindings
+
+#+begin_src emacs-lisp
+  (mb/evil-leader-key-def
+    "w" '(write-file :which-key "Write file")
+    "c" '(evil-window-delete :which-key "Delete window"))
 #+end_src
 
 ** Better Help
 
-   Use ~helpful~ to get better information from help messages. Do some remapping to ensure that helpful is used with the default help commands.
-#+begin_src emacs-lisp :tangle yes
-(use-package helpful
-  :custom
-  (counsel-describe-function-function #'helpful-callable)
-  (counsel-describe-variable-function #'helpful-variable)
-  :bind
-  ([remap describe-function] . counsel-describe-function)
-  ([remap describe-command] . helpful-command)
-  ([remap describe-variable] . counsel-describe-variable)
-  ([remap describe-key] . helpful-key))
+Use ~helpful~ to get better information from help messages. Do some remapping to ensure that helpful is used with the default help commands.
+#+begin_src emacs-lisp
+  (use-package helpful
+    :custom
+    (counsel-describe-function-function #'helpful-callable)
+    (counsel-describe-variable-function #'helpful-variable)
+    :bind
+    ([remap describe-function] . counsel-describe-function)
+    ([remap describe-command] . helpful-command)
+    ([remap describe-variable] . counsel-describe-variable)
+    ([remap describe-key] . helpful-key))
 #+end_src
 
 ** Completion
    
 The completion engine I've decided to start with is ~ivy~.
-#+begin_src emacs-lisp :tangle yes
-(use-package ivy
-  :config
-  (ivy-mode 1))
+#+begin_src emacs-lisp
+  (use-package ivy
+    :bind (("C-s" . swiper))
+    :config
+    (ivy-mode 1))
 #+end_src
 
 Add a more friendly interface for some of the ~ivy~ commands.
-#+begin_src emacs-lisp :tangle yes
-(use-package ivy-rich
-  :init (ivy-rich-mode 1))
+#+begin_src emacs-lisp
+  (use-package ivy-rich
+    :init (ivy-rich-mode 1))
 #+end_src
 
 The ~counsel~ package comes loaded with ~ivy~ but we want some custom bindings. Particularly replace the common Emacs functions with ~counsel~ functions.
-#+begin_src emacs-lisp :tangle yes
-(use-package counsel
-  :bind (("M-x" . counsel-M-x)
-         ("C-x b" . counsel-ibuffer)
-         ("C-x C-f" . counsel-find-file)
-         :map minibuffer-local-map
-         ("C-r" . 'counsel-minibuffer-history)))
+#+begin_src emacs-lisp
+  (use-package counsel
+    :bind (("M-x" . counsel-M-x)
+           ("C-x b" . counsel-ibuffer)
+           ("C-x C-f" . counsel-find-file)
+           :map minibuffer-local-map
+           ("C-r" . 'counsel-minibuffer-history)))
 #+end_src
 
 Make ~ivy~ look nice with by giving it a posframe to run commands in.
-#+begin_src emacs-lisp :tangle yes
-(use-package ivy-posframe
-  :ensure t
-  :delight
-  :custom
-  (ivy-posframe-parameters
-   '((left-fringe . 2)
-     (right-fringe . 2)
-     (internal-border-width . 2)))
-  (ivy-posframe-height-alist
-   '((swiper . 15)
-     (swiper-isearch . 15)
-     (t . 10)))
-  (ivy-posframe-display-functions-alist
-   '((complete-symbol . ivy-posframe-display-at-point)
-     (swiper . nil)
-     (swiper-isearch . nil)
-     (t . ivy-posframe-display-at-frame-center)))
-  :config
-  (ivy-posframe-mode 1))
+#+begin_src emacs-lisp
+  (use-package ivy-posframe
+    :ensure t
+    :delight
+    :custom
+    (ivy-posframe-parameters
+     '((left-fringe . 2)
+       (right-fringe . 2)
+       (internal-border-width . 2)))
+    (ivy-posframe-height-alist
+     '((swiper . 15)
+       (swiper-isearch . 15)
+       (t . 10)))
+    (ivy-posframe-display-functions-alist
+     '((complete-symbol . ivy-posframe-display-at-point)
+       (swiper . ivy-display-function-fallback)
+       (swiper-isearch . ivy-display-function-fallback)
+       (t . ivy-posframe-display-at-frame-center)))
+    :config
+    (ivy-posframe-mode 1))
 #+end_src
 
 *** Keybindings
 
 Set up some generic keybindings with our leader key for running ~counsel~ commands.
-#+begin_src emacs-lisp :tangle yes
-(mb/leader-key-def
- "x" '(counsel-M-x :which-key "Counsel execute function")
- ;; File completions
- "ff" '(counsel-find-file :which-key "Counsel find file")
- "fd" '(delete-file :which-key "Delete file")
- ;; Buffer commands
- "bb" '(counsel-ibuffer :which-key "Counsel switch buffer"))
+#+begin_src emacs-lisp
+  (mb/leader-key-def
+    "x" '(counsel-M-x :which-key "Counsel execute function")
+    ;; File completions
+    "ff" '(counsel-find-file :which-key "Counsel find file")
+    "fd" '(delete-file :which-key "Delete file")
+    ;; Buffer commands
+    "bb" '(counsel-ibuffer :which-key "Counsel switch buffer")
+    "bl" '(evil-switch-to-windows-last-buffer :which-key "Switch to last buffer"))
 #+end_src
 
 ** Search
 
-   Install the ripgrep package for search.
-#+begin_src emacs-lisp :tangle yes
-(use-package ripgrep)
+Install the ripgrep package for search.
+#+begin_src emacs-lisp
+  (use-package ripgrep)
 #+end_src
 
 * Visual Packages
@@ -212,93 +232,172 @@ Set up some generic keybindings with our leader key for running ~counsel~ comman
 Change a couple of quick visual settings to make things nicer
 
 Start by re-configuring the horrible bell.
-#+begin_src emacs-lisp :tangle yes
-(use-package mode-line-bell
-  :config (mode-line-bell-mode))
+#+begin_src emacs-lisp
+  (use-package mode-line-bell
+    :config (mode-line-bell-mode))
 #+end_src
 
 ** Theming
-#+begin_src emacs-lisp :tangle yes
-(use-package doom-themes
-  :config
-  (load-theme 'doom-monokai-classic t))
-(use-package powerline
-  :config
-  (powerline-center-evil-theme))
-(use-package rainbow-delimiters
-  :hook (prog-mode . rainbow-delimiters-mode))
+#+begin_src emacs-lisp
+  (use-package doom-themes
+    :config
+    (load-theme 'doom-monokai-classic t))
+  (use-package powerline
+    :config
+    (powerline-center-evil-theme))
+  (use-package rainbow-delimiters
+    :hook (prog-mode . rainbow-delimiters-mode))
 #+end_src
 
 * Development
   
-  To start I want spaces by default.
+To start I want spaces by default.
 
-#+begin_src emacs-lisp :tangle yes
-(setq-default indent-tabs-mode nil)
-(setq-default tab-width 4)
+#+begin_src emacs-lisp
+  (setq-default indent-tabs-mode nil)
+  (setq-default tab-width 4)
 #+end_src
 
 Enable line numbers except for some specific exceptions.
 
-#+begin_src emacs-lisp :tangle yes
-(column-number-mode)
-(global-display-line-numbers-mode t)
+#+begin_src emacs-lisp
+  (column-number-mode)
+  (global-display-line-numbers-mode t)
 
-(dolist (mode '(eshell-mode-hook))
-  (add-hook mode (lambda () (display-line-numbers-mode 0))))
+  (dolist (mode '(eshell-mode-hook
+                  org-mode-hook))
+    (add-hook mode (lambda () (display-line-numbers-mode 0))))
 #+end_src
 
 Add some basic modes for development.
-#+begin_src emacs-lisp :tangle yes
-(use-package yaml-mode)
-(use-package json-mode)
-(use-package dockerfile-mode
-  :config
-  (add-to-list 'auto-mode-alist
-	       '("Dockerfile\\'" . dockerfile-mode)))
+#+begin_src emacs-lisp
+  (use-package yaml-mode)
+  (use-package json-mode)
+  (use-package dockerfile-mode
+    :config
+    (add-to-list 'auto-mode-alist
+                 '("Dockerfile\\'" . dockerfile-mode)))
 #+end_src
 
 ** Git
 
-   For git we of course utilize the glorious ~magit~. As a personal standard I keep all of my repositories under ~~/code/~ and 3 levels down should be sufficient.
-#+begin_src emacs-lisp :tangle yes
-(use-package magit
-  :init
-  (setq magit-repository-directories '(("~/code/" . 3)
-				       ("~/.dotfiles/" . 1))))
+For git we of course utilize the glorious ~magit~. As a personal standard I keep all of my repositories under ~~/code/~ and 3 levels down should be sufficient.
+#+begin_src emacs-lisp
+  (use-package magit
+    :init
+    (setq magit-repository-directories '(("~/code/" . 3)
+                                         ("~/.dotfiles/" . 1))))
 #+end_src
 
 ** Project Management
 
-   Use ~projectile~ as our project interaction library.
-#+begin_src emacs-lisp :tangle yes
-(use-package projectile
-  :after magit
-  :diminish projectile-mode
-  :config (projectile-mode)
-  :custom
-  (projectile-completion-system 'ivy)
-  (projectile-indexing-method 'alien)
-  (projectile-enable-caching t)
-  :bind-keymap
-  ("C-c p" . projectile-command-map)
-  :init
-  (setq projectile-switch-project-action #'projectile-dired)
-  (mapc #'projectile-add-known-project
+Use ~projectile~ as our project interaction library.
+#+begin_src emacs-lisp
+  (use-package projectile
+    :after magit
+    :diminish projectile-mode
+    :config (projectile-mode)
+    :custom
+    (projectile-completion-system 'ivy)
+    (projectile-indexing-method 'alien)
+    (projectile-enable-caching t)
+    :bind-keymap
+    ("C-c p" . projectile-command-map)
+    :init
+    (setq projectile-switch-project-action #'projectile-dired)
+    (mapc #'projectile-add-known-project
           (mapcar #'file-name-as-directory (magit-list-repos)))
     (projectile-save-known-projects))
-(use-package counsel-projectile
-  :config (counsel-projectile-mode))
+  (use-package counsel-projectile
+    :config (counsel-projectile-mode))
 #+end_src
 
 Set a ~general~ keybinding for the ~projectile~ command map.
 
-#+begin_src emacs-lisp :tangle yes
-(mb/leader-key-def
- "p" '(projectile-command-map :which-key "Projectile commands"))
+#+begin_src emacs-lisp
+  (mb/leader-key-def
+    "p" '(projectile-command-map :which-key "Projectile commands"))
 #+end_src
 
 * Org Mode
+
+#+begin_src emacs-lisp
+  (setq org-structure-template-alist
+        '(("a" . "export ascii")
+          ("c" . "center")
+          ("C" . "comment")
+          ("e" . "example")
+          ("E" . "export")
+          ("h" . "export html")
+          ("l" . "src emacs-lisp")
+          ("p" . "src python")
+          ("q" . "quote")
+          ("s" . "src")
+          ("v" . "verse")))
+#+end_src
+
+** Visual Changes
+   
+#+begin_src emacs-lisp
+  (defun mb/org-font-setup ()
+    ;; Replace list hyphen with dot
+    (font-lock-add-keywords 'org-mode
+                            '(("^ *\\([-]\\) "
+                               (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
+
+    ;; Set faces for heading levels
+    (dolist (face '((org-level-1 . 1.2)
+                    (org-level-2 . 1.1)
+                    (org-level-3 . 1.05)
+                    (org-level-4 . 1.0)
+                    (org-level-5 . 1.1)
+                    (org-level-6 . 1.1)
+                    (org-level-7 . 1.1)
+                    (org-level-8 . 1.1)))
+      (set-face-attribute (car face) nil :font "Georgia" :weight 'regular :height (cdr face)))
+
+    ;; Ensure that anything that should be fixed-pitch in Org files appears that way
+    (set-face-attribute 'org-block nil    :foreground nil :inherit 'fixed-pitch)
+    (set-face-attribute 'org-table nil    :inherit 'fixed-pitch)
+    (set-face-attribute 'org-formula nil  :inherit 'fixed-pitch)
+    (set-face-attribute 'org-code nil     :inherit '(shadow fixed-pitch))
+    (set-face-attribute 'org-table nil    :inherit '(shadow fixed-pitch))
+    (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
+    (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
+    (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
+    (set-face-attribute 'org-checkbox nil  :inherit 'fixed-pitch))
+
+  (defun mb/org-mode-setup ()
+    (org-indent-mode)
+    (variable-pitch-mode 1)
+    (visual-line-mode 1))
+  (use-package org
+    :pin manual
+    :hook (org-mode . mb/org-mode-setup)
+    :config
+    (require 'org-tempo)
+    (mb/org-font-setup)
+    :custom
+    (org-ellipsis " ▾")
+    (org-src-tab-acts-natively t)
+    (org-hide-emphasis-markers t))
+#+end_src
+
+#+begin_src emacs-lisp
+  (use-package org-bullets
+    :hook (org-mode . org-bullets-mode))
+#+end_src
+
+#+begin_src emacs-lisp
+(defun mb/org-mode-visual-fill ()
+  (setq visual-fill-column-width 100
+        visual-fill-column-center-text t)
+  (visual-fill-column-mode 1))
+
+(use-package visual-fill-column
+  :hook (org-mode . mb/org-mode-visual-fill))
+#+end_src
+
 * Extra Configuration
 ;; Local Variables:
 ;; eval: (add-hook 'after-save-hook (lambda ()(org-babel-tangle)) nil t)
