@@ -63,7 +63,7 @@
 
 (mb/evil-leader-key-def
   "w" '(write-file :which-key "Write file")
-  "c" '(evil-window-delete :which-key "Delete window"))
+  "x" '(evil-window-delete :which-key "Delete window"))
 
 (use-package helpful
   :custom
@@ -76,7 +76,19 @@
   ([remap describe-key] . helpful-key))
 
 (use-package ivy
-  :bind (("C-s" . swiper))
+  :bind (("C-s" . swiper)
+         :map ivy-minibuffer-map
+         ("TAB" . ivy-alt-done)
+         ("C-l" . ivy-alt-done)
+         ("C-j" . ivy-next-line)
+         ("C-k" . ivy-previous-line)
+         :map ivy-switch-buffer-map
+         ("C-k" . ivy-previous-line)
+         ("C-l" . ivy-done)
+         ("C-d" . ivy-switch-buffer-kill)
+         :map ivy-reverse-i-search-map
+         ("C-k" . ivy-previous-line)
+         ("C-d" . ivy-reverse-i-search-kill))
   :config
   (ivy-mode 1))
 
@@ -242,3 +254,51 @@
 
 (use-package visual-fill-column
   :hook (org-mode . mb/org-mode-visual-fill))
+
+(defun mb/org-insert-heading-below ()
+    (interactive)
+    (org-insert-heading-respect-content)
+    (evil-insert-state))
+(defun mb/org-insert-todo-heading-below ()
+    (interactive)
+    (org-insert-todo-heading-respect-content)
+    (evil-insert-state))
+
+(general-define-key
+ :states '(normal emacs motion)
+ :keymaps 'org-mode-map
+ "C-j" 'org-next-visible-heading
+ "C-k" 'org-previous-visible-heading
+ [remap org-insert-heading-respect-content] 'mb/org-insert-heading-below
+ [remap org-insert-todo-heading-respect-content] 'mb/org-insert-todo-heading-below
+ ">>" 'org-demote-subtree
+ "<<" 'org-promote-subtree)
+
+(setq org-confirm-babel-evaluate nil)
+
+(mb/evil-leader-key-def
+  "c" '(org-capture :which-key "Org capture")
+  "a" '(org-agenda :which-key "Org agenda")
+  "l" '(org-store-link :which-key "Org store link"))
+
+(setq org-agenda-files '("~/org"))
+(setq org-log-done t)
+(setq org-capture-templates '(("t" "Todo [inbox]" entry
+                               (file+headline "~/org/gtd.org" "Inbox")
+                               "* TODO %i%?\n:PROPERTIES:\n:CreatedOn: %U\n:END:")
+                              ("T" "Tickler" entry
+                               (file+headline "~/org/tickler.org" "Tickler")
+                               "* %i%? \n %U")))
+(setq org-tag-alist '(("@home" . ?w)
+                      ("@errand" . ?e)
+                      ("@computer" . ?c)
+                      ("@phone" . ?p)))
+
+
+(setq org-refile-targets '(("~/org/gtd.org" :maxlevel . 3)
+                           ("~/org/someday.org" :level . 1)
+                           ("~/org/tickler.org" :maxlevel . 2)))
+
+(use-package org-capture
+  :ensure nil
+  :hook (org-capture-mode . evil-insert-state))

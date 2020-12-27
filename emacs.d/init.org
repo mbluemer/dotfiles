@@ -5,10 +5,11 @@
 Inspiration has been heavily borrowed from the following sources:
 - https://blog.aaronbieber.com/2015/05/24/from-vim-to-emacs-in-fourteen-days.html
 - https://gist.github.com/martinklepsch/4e5f2c52a5d9797278d1
-- https://www.youtube.com/watch?v=74zOY-vgkyw&list=PLEoMzSkcN8oPH1au7H6B7bBJ4ZO7BXjSZ
+- https://www.youtube.com/channel/UCAiiOTio8Yu69c3XnR7nQBQ
 - https://emacs.stackexchange.com/a/32635
 - https://bitbucket.org/eschwab/emacs.d/src/master/
 - http://www.howardism.org/Technical/Emacs/orgmode-wordprocessor.html
+- https://emacs.cafe/emacs/orgmode/gtd/2017/06/30/orgmode-gtd.html
   
 * Startup
 
@@ -139,7 +140,7 @@ Make ESC quit prompts.
 #+begin_src emacs-lisp
   (mb/evil-leader-key-def
     "w" '(write-file :which-key "Write file")
-    "c" '(evil-window-delete :which-key "Delete window"))
+    "x" '(evil-window-delete :which-key "Delete window"))
 #+end_src
 
 ** Better Help
@@ -162,7 +163,19 @@ Use ~helpful~ to get better information from help messages. Do some remapping to
 The completion engine I've decided to start with is ~ivy~.
 #+begin_src emacs-lisp
   (use-package ivy
-    :bind (("C-s" . swiper))
+    :bind (("C-s" . swiper)
+           :map ivy-minibuffer-map
+           ("TAB" . ivy-alt-done)
+           ("C-l" . ivy-alt-done)
+           ("C-j" . ivy-next-line)
+           ("C-k" . ivy-previous-line)
+           :map ivy-switch-buffer-map
+           ("C-k" . ivy-previous-line)
+           ("C-l" . ivy-done)
+           ("C-d" . ivy-switch-buffer-kill)
+           :map ivy-reverse-i-search-map
+           ("C-k" . ivy-previous-line)
+           ("C-d" . ivy-reverse-i-search-kill))
     :config
     (ivy-mode 1))
 #+end_src
@@ -396,6 +409,78 @@ Set a ~general~ keybinding for the ~projectile~ command map.
 
 (use-package visual-fill-column
   :hook (org-mode . mb/org-mode-visual-fill))
+#+end_src
+
+** Keymappings
+
+Create special functions for navigation
+#+begin_src emacs-lisp
+  (defun mb/org-insert-heading-below ()
+      (interactive)
+      (org-insert-heading-respect-content)
+      (evil-insert-state))
+  (defun mb/org-insert-todo-heading-below ()
+      (interactive)
+      (org-insert-todo-heading-respect-content)
+      (evil-insert-state))
+#+end_src
+
+  Remap certain key combos that ~evil-collection~ sets.
+#+begin_src emacs-lisp
+  (general-define-key
+   :states '(normal emacs motion)
+   :keymaps 'org-mode-map
+   "C-j" 'org-next-visible-heading
+   "C-k" 'org-previous-visible-heading
+   [remap org-insert-heading-respect-content] 'mb/org-insert-heading-below
+   [remap org-insert-todo-heading-respect-content] 'mb/org-insert-todo-heading-below
+   ">>" 'org-demote-subtree
+   "<<" 'org-promote-subtree)
+#+end_src
+
+** Babel
+
+Stop asking whether or not I want to evaluate code. This becomes a nuisance when testing configuration changes.
+#+begin_src emacs-lisp
+(setq org-confirm-babel-evaluate nil)
+#+end_src
+
+** Agenda
+
+Some quick keybindings to make capturing things easy.
+#+begin_src emacs-lisp
+  (mb/evil-leader-key-def
+    "c" '(org-capture :which-key "Org capture")
+    "a" '(org-agenda :which-key "Org agenda")
+    "l" '(org-store-link :which-key "Org store link"))
+#+end_src
+
+Configure the bulk of our Agenda workflow.
+#+begin_src emacs-lisp
+  (setq org-agenda-files '("~/org"))
+  (setq org-log-done t)
+  (setq org-capture-templates '(("t" "Todo [inbox]" entry
+                                 (file+headline "~/org/gtd.org" "Inbox")
+                                 "* TODO %i%?\n:PROPERTIES:\n:CreatedOn: %U\n:END:")
+                                ("T" "Tickler" entry
+                                 (file+headline "~/org/tickler.org" "Tickler")
+                                 "* %i%? \n %U")))
+  (setq org-tag-alist '(("@home" . ?w)
+                        ("@errand" . ?e)
+                        ("@computer" . ?c)
+                        ("@phone" . ?p)))
+
+
+  (setq org-refile-targets '(("~/org/gtd.org" :maxlevel . 3)
+                             ("~/org/someday.org" :level . 1)
+                             ("~/org/tickler.org" :maxlevel . 2)))
+#+end_src
+
+Add a hook to ~org-capture~ so that insert state is activated on entry.
+#+begin_src emacs-lisp
+  (use-package org-capture
+    :ensure nil
+    :hook (org-capture-mode . evil-insert-state)) 
 #+end_src
 
 * Extra Configuration
