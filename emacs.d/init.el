@@ -143,10 +143,9 @@
 
 (use-package doom-themes
   :config
-  (load-theme 'doom-monokai-classic t))
-(use-package powerline
-  :config
-  (powerline-center-evil-theme))
+  (load-theme 'doom-gruvbox t))
+(use-package doom-modeline
+  :init (doom-modeline-mode 1))
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
 
@@ -280,6 +279,9 @@
  "<<" 'org-promote-subtree)
 
 (setq org-confirm-babel-evaluate nil)
+
+(add-hook 'org-mode-hook
+          (lambda () (add-hook 'after-save-hook #'org-babel-tangle :append :local)))
 
 (mb/evil-leader-key-def
   "c" '(org-capture :which-key "Org capture")

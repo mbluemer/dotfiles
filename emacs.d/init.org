@@ -262,10 +262,9 @@ Start by re-configuring the horrible bell.
 #+begin_src emacs-lisp
   (use-package doom-themes
     :config
-    (load-theme 'doom-monokai-classic t))
-  (use-package powerline
-    :config
-    (powerline-center-evil-theme))
+    (load-theme 'doom-gruvbox t))
+  (use-package doom-modeline
+    :init (doom-modeline-mode 1))
   (use-package rainbow-delimiters
     :hook (prog-mode . rainbow-delimiters-mode))
 #+end_src
@@ -453,6 +452,12 @@ Stop asking whether or not I want to evaluate code. This becomes a nuisance when
 (setq org-confirm-babel-evaluate nil)
 #+end_src
 
+Auto tangle on save to ensure that all changes get committed properly.
+#+begin_src emacs-lisp
+  (add-hook 'org-mode-hook
+            (lambda () (add-hook 'after-save-hook #'org-babel-tangle :append :local)))
+#+end_src
+
 ** Agenda
 
 Some quick keybindings to make capturing things easy.
@@ -493,8 +498,3 @@ Add a hook to ~org-capture~ so that insert state is activated on entry.
     :ensure nil
     :hook (org-capture-mode . evil-insert-state)) 
 #+end_src
-
-* Extra Configuration
-;; Local Variables:
-;; eval: (add-hook 'after-save-hook (lambda ()(org-babel-tangle)) nil t)
-;; End:
