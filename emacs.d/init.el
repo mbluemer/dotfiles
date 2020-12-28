@@ -61,9 +61,14 @@
 
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 
+(defun mb/kill-this-buffer ()
+  "Kill the current buffer."
+  (interactive)
+  (kill-buffer (current-buffer)))
+
 (mb/evil-leader-key-def
-  "w" '(write-file :which-key "Write file")
-  "x" '(evil-window-delete :which-key "Delete window"))
+  "w" '(save-buffer :which-key "Save buffer")
+  "x" '(mb/kill-this-buffer :which-key "Kill current buffer"))
 
 (use-package helpful
   :custom
@@ -284,18 +289,21 @@
 (setq org-agenda-files '("~/org"))
 (setq org-log-done t)
 (setq org-capture-templates '(("t" "Todo [inbox]" entry
-                               (file+headline "~/org/gtd.org" "Inbox")
+                               (file+headline "~/org/inbox.org" "Inbox")
                                "* TODO %i%?\n:PROPERTIES:\n:CreatedOn: %U\n:END:")
                               ("T" "Tickler" entry
                                (file+headline "~/org/tickler.org" "Tickler")
-                               "* %i%? \n %U")))
+                               "* %i%? \n %U")
+                              ("b" "Bookmark" entry
+                               (file+headline "~/org/lists.org" "Bookmarks")
+                               "* %?\n:PROPERTIES:\n:CreatedOn: %U\n:END:\n\n" :empty-lines 1)))
 (setq org-tag-alist '(("@home" . ?w)
                       ("@errand" . ?e)
                       ("@computer" . ?c)
                       ("@phone" . ?p)))
 
 
-(setq org-refile-targets '(("~/org/gtd.org" :maxlevel . 3)
+(setq org-refile-targets '(("~/org/gtd.org" :maxlevel . 2)
                            ("~/org/someday.org" :level . 1)
                            ("~/org/tickler.org" :maxlevel . 2)))
 
