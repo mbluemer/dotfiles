@@ -15,9 +15,16 @@
 (set-face-attribute 'fixed-pitch nil :font "FiraCode Nerd Font Mono" :height mb/default-font-size)
 (set-face-attribute 'variable-pitch nil :font "Georgia" :height mb/default-variable-font-size :weight 'regular)
 
+(use-package exec-path-from-shell
+  :ensure t
+  :if (memq window-system '(mac ns x))
+  :config
+  (exec-path-from-shell-initialize))
+
 (require 'package)
 
-(setq package-archives '(("melpa" . "http://melpa.org/packages/")
+(setq package-archives '(("gnu-elpa" . "https://elpa.gnu.org/packages/")
+                         ("melpa" . "http://melpa.org/packages/")
                          ("org" . "https://orgmode.org/elpa/")
                          ("melpa-stable" . "http://stable.melpa.org/packages/")))
 
@@ -191,6 +198,46 @@
 
 (mb/leader-key-def
   "p" '(projectile-command-map :which-key "Projectile commands"))
+
+(use-package lsp-mode
+  :commands (lsp lsp-deferred)
+  :init
+  (setq lsp-keymap-prefix "C-c l")
+  :custom
+  (lsp-completion-provider :capf)
+  :config
+  (lsp-enable-which-key-integration t))
+(use-package lsp-ui
+  :commands (lsp-ui-mode))
+(use-package lsp-treemacs
+  :after lsp)
+
+(defun mb/company-complete-selection ()
+  "Insert the selected candidate or the first if none are selected."
+  (interactive)
+  (if company-selection
+      (company-complete-selection)
+    (company-complete-number 1)))
+
+(use-package company
+  :after lsp-mode
+  :hook (lsp-mode . company-mode)
+  :bind
+  (:map company-active-map
+        ("<tab>" . mb/company-complete-selection))
+  (:map lsp-mode-map
+        ("<tab>" . company-indent-or-complete-common))
+  :custom
+  (company-minimum-prefix-length 1)
+  (company-idle-delay 0.0))
+(use-package company-box
+  :hook (company-mode . company-box-mode))
+
+(use-package typescript-mode
+  :mode "\\.ts\\'"
+  :hook (typescript-mode . lsp-deferred)
+  :config
+  (setq typescript-indent-level 2))
 
 (setq org-structure-template-alist
       '(("a" . "export ascii")
