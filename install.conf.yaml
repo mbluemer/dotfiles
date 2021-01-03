@@ -16,7 +16,7 @@
     ~/.config/skhd:
     ~/.config/yabai:
     ~/.config/fish:
-    ~/.emacs.d:
+    ~/.doom.d:
     ~/.vimrc: nvim/init.vim
     ~/.i3:
     ~/.Xmodmap:
@@ -25,3 +25,10 @@
   - ['which apt-get && xargs -a apt/packages.txt sudo apt-get install', Trying to install packages with Apt]
   - ['git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.8.0', Installing asdf]
   - ['curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh > installer.sh && sh ./installer.sh ~/.cache/dein && rm installer.sh', Installing dein]
+  - ['git clone --depth 1 https://github.com/hlissner/doom-emacs ~/.emacs.d', Cloning Doom Emacs]
+  -
+    command: '~/.emacs.d/bin/doom install'
+    stdin: true
+    stdout: true
+    description: Install Doom Emacs
+  - ['~/.emacs.d/bin/doom sync', Sync Doom Emacs]
