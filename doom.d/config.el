@@ -137,7 +137,7 @@
                                         ("oc" "Project changelog" entry
                                          #'+org-capture-central-project-changelog-file
                                          "* %U %?\n %i\n %a" :heading "Changelog" :prepend t))
-                org-tag-alist '(("@home" . ?w)
+                org-tag-alist '(("@home" . ?h)
                                 ("@errand" . ?e)
                                 ("@computer" . ?c)
                                 ("@phone" . ?p))
@@ -149,12 +149,3 @@
         :n "C-j" #'org-next-visible-heading
         :n "C-k" #'org-previous-visible-heading))
 (add-hook! org-mode org-bullets-mode)
-
-;; Fill the column so we have centered text
-(defun mb/org-mode-visual-fill ()
-  (setq visual-fill-column-width 100
-        visual-fill-column-center-text t)
-  (visual-fill-column-mode 1))
-
-(use-package visual-fill-column
-  :hook (org-mode . mb/org-mode-visual-fill))
