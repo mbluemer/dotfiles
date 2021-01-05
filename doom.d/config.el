@@ -1,7 +1,7 @@
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
 
 ;; Place your private configuration here! Remember, you do not need to run 'doom
-;; sync' after modifying this file!
+;; Sync' after modifying this file!
 
 
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
@@ -60,6 +60,9 @@
 (add-hook 'lsp-after-initialize-hook
           (lambda ()
             (flycheck-add-next-checker 'lsp 'python-flake8)))
+(after! flycheck
+  (setq flycheck-check-syntax-automatically '(save mode-enable)))
+(setq lsp-enable-file-watchers nil)
 
 ;; Disable line numbers in certain modes
 (add-hook! org-mode #'doom-disable-line-numbers-h)
@@ -68,8 +71,10 @@
 (after! magit
   (setq magit-repository-directories '(("~/code/" . 3)
                                        ("~/.dotfiles/" . 1))))
-(after! projectile
-  (setq projectile-project-search-path '("~/code/")))
+(after! (:and projectile magit)
+  (mapc #'projectile-add-known-project
+        (mapcar #'file-name-as-directory (magit-list-repos)))
+  (projectile-save-known-projects))
 
 ;; Fix autocomplete the way I like it
 (defun mb/company-complete-selection ()
@@ -102,48 +107,50 @@
                   ("q" . "quote")
                   ("s" . "src")
                   ("v" . "verse"))
-                org-agenda-files '("~/org")
-                org-log-done t
-                org-capture-templates '(("t" "Todo [inbox]" entry
-                                         (file+headline "~/org/inbox.org" "Inbox")
-                                         "* TODO %i%?\n:PROPERTIES:\n:CreatedOn: %U\n:END:")
-                                        ("T" "Tickler" entry
-                                         (file+headline "~/org/tickler.org" "Tickler")
-                                         "* %i%? \n %U")
-                                        ("b" "Bookmark" entry
-                                         (file+headline "~/org/lists.org" "Bookmarks")
-                                         "* %?\n:PROPERTIES:\n:CreatedOn: %U\n:END:\n\n" :empty-lines 1)
-                                        ("j" "Journal" entry
-                                         (file+olp+datetree +org-capture-journal-file)
+        org-agenda-files '("~/org")
+        org-log-done t
+        org-log-into-drawer t
+        org-todo-keywords '((sequence "TODO(t!)" "STARTED(s!)" "WAITING(w@/!)" "|" "DONE(d!)" "CANCELLED(c@)"))
+        org-capture-templates '(("t" "Todo [inbox]" entry
+                                        (file+headline "~/org/inbox.org" "Inbox")
+                                        "* TODO %i%?\n:PROPERTIES:\n:CreatedOn: %U\n:END:")
+                                ("T" "Tickler" entry
+                                        (file+headline "~/org/tickler.org" "Tickler")
+                                        "* %i%? \n %U")
+                                ("b" "Bookmark" entry
+                                        (file+headline "~/org/lists.org" "Bookmarks")
+                                        "* %?\n:PROPERTIES:\n:CreatedOn: %U\n:END:\n\n" :empty-lines 1)
+                                ("j" "Journal" entry
+                                        (file+olp+datetree +org-capture-journal-file)
 
-                                         "* %U %?\n%i\n%a" :prepend t)
-                                        ("p" "Templates for projects")
-                                        ("pt" "Project-local todo" entry
-                                         (file+headline +org-capture-project-todo-file "Inbox")
-                                         "* TODO %?\n%i\n%a" :prepend t)
-                                        ("pn" "Project-local notes" entry
-                                         (file+headline +org-capture-project-notes-file "Inbox")
-                                         "* %U %?\n%i\n%a" :prepend t)
-                                        ("pc" "Project-local changelog" entry
-                                         (file+headline +org-capture-project-changelog-file "Unreleased")
-                                         "* %U %?\n%i\n%a" :prepend t)
-                                        ("o" "Centralized templates for projects")
-                                        ("ot" "Project todo" entry
-                                         #'+org-capture-central-project-todo-file
-                                         "* TODO %?\n %i\n %a" :heading "Tasks" :prepend nil)
-                                        ("on" "Project notes" entry
-                                         #'+org-capture-central-project-notes-file
-                                         "* %U %?\n %i\n %a" :heading "Notes" :prepend t)
-                                        ("oc" "Project changelog" entry
-                                         #'+org-capture-central-project-changelog-file
-                                         "* %U %?\n %i\n %a" :heading "Changelog" :prepend t))
-                org-tag-alist '(("@home" . ?h)
-                                ("@errand" . ?e)
-                                ("@computer" . ?c)
-                                ("@phone" . ?p))
-                org-refile-targets '(("~/org/gtd.org" :maxlevel . 2)
-                                     ("~/org/someday.org" :level . 1)
-                                     ("~/org/tickler.org" :maxlevel . 2)))
+                                        "* %U %?\n%i\n%a" :prepend t)
+                                ("p" "Templates for projects")
+                                ("pt" "Project-local todo" entry
+                                        (file+headline +org-capture-project-todo-file "Inbox")
+                                        "* TODO %?\n%i\n%a" :prepend t)
+                                ("pn" "Project-local notes" entry
+                                        (file+headline +org-capture-project-notes-file "Inbox")
+                                        "* %U %?\n%i\n%a" :prepend t)
+                                ("pc" "Project-local changelog" entry
+                                        (file+headline +org-capture-project-changelog-file "Unreleased")
+                                        "* %U %?\n%i\n%a" :prepend t)
+                                ("o" "Centralized templates for projects")
+                                ("ot" "Project todo" entry
+                                        #'+org-capture-central-project-todo-file
+                                        "* TODO %?\n %i\n %a" :heading "Tasks" :prepend nil)
+                                ("on" "Project notes" entry
+                                        #'+org-capture-central-project-notes-file
+                                        "* %U %?\n %i\n %a" :heading "Notes" :prepend t)
+                                ("oc" "Project changelog" entry
+                                        #'+org-capture-central-project-changelog-file
+                                        "* %U %?\n %i\n %a" :heading "Changelog" :prepend t))
+        org-tag-alist '(("@home" . ?h)
+                        ("@errand" . ?e)
+                        ("@computer" . ?c)
+                        ("@phone" . ?p))
+        org-refile-targets '(("~/org/gtd.org" :maxlevel . 2)
+                                ("~/org/someday.org" :level . 1)
+                                ("~/org/tickler.org" :maxlevel . 2)))
   (map! :map evil-org-mode-map
         :after evil-org
         :n "C-j" #'org-next-visible-heading
