@@ -1,73 +1,34 @@
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
 
-;; Place your private configuration here! Remember, you do not need to run 'doom
-;; Sync' after modifying this file!
-
-
-;; Some functionality uses this to identify you, e.g. GPG configuration, email
-;; clients, file templates and snippets.
+;; Set contact information
 (setq user-full-name "Mark Bluemer"
       user-mail-address "mark@theblue.dev")
 
-;; Doom exposes five (optional) variables for controlling fonts in Doom. Here
-;; are the three important ones:
-;;
-;; + `doom-font'
-;; + `doom-variable-pitch-font'
-;; + `doom-big-font' -- used for `doom-big-font-mode'; use this for
-;;   presentations or streaming.
-;;
-;; They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
-;; font string. You generally only need these two:
-;; (setq doom-font (font-spec :family "monospace" :size 12 :weight 'semi-light)
-;;       doom-variable-pitch-font (font-spec :family "sans" :size 13))
-
-;; There are two ways to load a theme. Both assume the theme is installed and
-;; available. You can either set `doom-theme' or manually load a theme with the
-;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-tomorrow-night)
+;; Theming
+(setq doom-theme 'doom-flatwhite)
 (setq doom-font (font-spec :family "FiraCode Nerd Font Mono" :size 14))
 
-;; If you use `org' and don't want your org files in the default location below,
-;; change `org-directory'. It must be set before org loads!
-(setq org-directory "~/org/")
-
-;; This determines the style of line numbers in effect. If set to `nil', line
-;; numbers are disabled. For relative line numbers, set this to `relative'.
+;; Set line numbers
 (setq display-line-numbers-type t)
+;; Disable line numbers in certain modes thought
+(add-hook! org-mode #'doom-disable-line-numbers-h)
 
-;; Here are some additional functions/macros that could help you configure Doom:
-;;
-;; - `load!' for loading external *.el files relative to this one
-;; - `use-package!' for configuring packages
-;; - `after!' for running code after a package has loaded
-;; - `add-load-path!' for adding directories to the `load-path', relative to
-;;   this file. Emacs searches the `load-path' when you load packages with
-;;   `require' or `use-package'.
-;; - `map!' for binding new keys
-;;
-;; To get information about any of these functions/macros, move the cursor over
-;; the highlighted symbol at press 'K' (non-evil users must press 'C-c c k').
-;; This will open documentation for it, including demos of how they are used.
-;;
-;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
-;; they are implemented.
-
+;; Remap what search buffer appears with Emacs' default
 (map! "C-s" #'+default/search-buffer)
+
+;; LSP Configuration
+(setq lsp-enable-file-watchers nil)
+
+;; LSP Python setup
 (after! lsp-pyright
   (setq lsp-pyright-typechecking-mode "off"))
-
 (add-hook 'lsp-after-initialize-hook
           (lambda ()
             (flycheck-add-next-checker 'lsp 'python-flake8)))
 (after! flycheck
   (setq flycheck-check-syntax-automatically '(save mode-enable)))
-(setq lsp-enable-file-watchers nil)
 
-;; Disable line numbers in certain modes
-(add-hook! org-mode #'doom-disable-line-numbers-h)
-
-;; Set up magit and projectile repository confguration
+;; Magit and Projectile repository confguration
 (after! magit
   (setq magit-repository-directories '(("~/code/" . 3)
                                        ("~/.dotfiles/" . 1))))
@@ -87,72 +48,115 @@
   (map! :map company-active-map "<tab>" #'mb/company-complete-selection)
   (map! :map lsp-mode-map "<tab>" #'company-indent-or-complete-common))
 
-;; Some org Configuration
+
+;; Org configuration
 (after! org
+  (setq org-directory "~/org/"
+        org-hide-emphasis-markers t
+        org-ellipsis " ▾")
+
+  ;; Org templates
+  (setq org-structure-template-alist
+        '(("a" . "export ascii")
+          ("c" . "center")
+          ("C" . "comment")
+          ("e" . "example")
+          ("E" . "export")
+          ("h" . "export html")
+          ("l" . "src emacs-lisp")
+          ("p" . "src python")
+          ("q" . "quote")
+          ("s" . "src")
+          ("v" . "verse")))
+
+  ;; Org Agenda basic configuration
+  (setq org-agenda-files '("~/org")
+        org-log-done t
+        org-log-into-drawer t)
+
+  ;; Org Agenda capture templates and refiling
+  (setq org-capture-templates
+        '(("t" "Todo [inbox]" entry
+           (file+headline "~/org/inbox.org" "Inbox")
+           "* TODO %i%?\n:PROPERTIES:\n:CreatedOn: %U\n:END:")
+          ("T" "Tickler" entry
+           (file+headline "~/org/tickler.org" "Tickler")
+           "* %i%? \n %U")
+          ("b" "Bookmark" entry
+           (file+headline "~/org/lists.org" "Bookmarks")
+           "* %?\n:PROPERTIES:\n:CreatedOn: %U\n:END:\n\n" :empty-lines 1)
+          ("j" "Journal" entry
+           (file+olp+datetree +org-capture-journal-file)
+
+           "* %U %?\n%i\n%a" :prepend t))
+        org-refile-targets '(("~/org/work.org" :maxlevel . 2)
+                             ("~/org/personal.org" :maxlevel . 2)
+                             ("~/org/someday.org" :level . 1)
+                             ("~/org/tickler.org" :maxlevel . 2)))
+
+
+  ;; Org Tags
+  (setq org-tag-alist '(("@home" . ?h)
+                        ("@errand" . ?e)
+                        ("@computer" . ?c)
+                        ("@phone" . ?p)))
+
+  ;; Org agenda todo states and faces
+  (setq org-todo-keywords '((sequence "TODO(t!)" "NEXT(n!)" "STARTED(s!)" "WAITING(w@/!)" "|" "DONE(d!)" "CANCELLED(c@/!)")))
+  (setq org-todo-keyword-faces '(("TODO" . "#e76f51")
+                                ("NEXT" . "#d62828")
+                                ("STARTED" . "#2a9d8f")
+                                ("WAITING" . "#e9c46a")
+                                ("DONE" . "#264653")
+                                ("CANCELLED" . "#264653")))
+  (setq org-clock-in-switch-to-state "STARTED")
+
+  ;; Org agenda defaults
+  (setq org-agenda-skip-deadline-if-done t
+        org-agenda-skip-scheduled-if-done t)
+
+  ;; Create a custom agenda
+  (setq org-agenda-custom-commands
+        '(("c" "Simple agenda view"
+         ((tags "PRIORITY=\"A\"-TODO=\"DONE\"-TODO=\"CANCELLED\""
+                ((org-agenda-overriding-header "High-priority tasks:")))
+          (agenda "" ((org-agenda-span 3)
+                      (org-agenda-start-day "+0d")))
+          (tags "CATEGORY=\"Work\"/WAITING"
+                ((org-agenda-skip-function
+                  '(org-agenda-skip-if nil '(scheduled deadline)))
+                 (org-agenda-sorting-strategy '(priority-down todo-state-down))
+                 (org-agenda-overriding-header "Waiting")))
+          (tags "-PRIORITY=\"A\"+CATEGORY=\"Work\"/!+TODO|+NEXT|+STARTED"
+                ((org-agenda-skip-function
+                  '(org-agenda-skip-if nil '(scheduled deadline)))
+                 (org-agenda-sorting-strategy '(priority-down todo-state-down))
+                 (org-agenda-overriding-header "Next Work Tasks")))
+          (tags "-REFILE-PRIORITY=\"A\"-CATEGORY=\"Work\"/!+TODO|+NEXT|+STARTED"
+                ((org-agenda-skip-function
+                  '(org-agenda-skip-if nil '(scheduled deadline)))
+                 (org-agenda-sorting-strategy '(priority-down todo-state-down timestamp-down category-up))
+                 (org-agenda-overriding-header "Personal Tasks")))
+          (tags "CATEGORY=\"Habits\"/TODO"
+                ((org-agenda-overriding-header "Habits")))))))
+
   ;; Replace list hyphen with dot
   (font-lock-add-keywords 'org-mode
                           '(("^ *\\([-]\\) "
                              (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
-  (setq org-hide-emphasis-markers t
-        org-ellipsis " ▾"
-        org-structure-template-alist
-                '(("a" . "export ascii")
-                  ("c" . "center")
-                  ("C" . "comment")
-                  ("e" . "example")
-                  ("E" . "export")
-                  ("h" . "export html")
-                  ("l" . "src emacs-lisp")
-                  ("p" . "src python")
-                  ("q" . "quote")
-                  ("s" . "src")
-                  ("v" . "verse"))
-        org-agenda-files '("~/org")
-        org-log-done t
-        org-log-into-drawer t
-        org-todo-keywords '((sequence "TODO(t!)" "STARTED(s!)" "WAITING(w@/!)" "|" "DONE(d!)" "CANCELLED(c@)"))
-        org-capture-templates '(("t" "Todo [inbox]" entry
-                                        (file+headline "~/org/inbox.org" "Inbox")
-                                        "* TODO %i%?\n:PROPERTIES:\n:CreatedOn: %U\n:END:")
-                                ("T" "Tickler" entry
-                                        (file+headline "~/org/tickler.org" "Tickler")
-                                        "* %i%? \n %U")
-                                ("b" "Bookmark" entry
-                                        (file+headline "~/org/lists.org" "Bookmarks")
-                                        "* %?\n:PROPERTIES:\n:CreatedOn: %U\n:END:\n\n" :empty-lines 1)
-                                ("j" "Journal" entry
-                                        (file+olp+datetree +org-capture-journal-file)
 
-                                        "* %U %?\n%i\n%a" :prepend t)
-                                ("p" "Templates for projects")
-                                ("pt" "Project-local todo" entry
-                                        (file+headline +org-capture-project-todo-file "Inbox")
-                                        "* TODO %?\n%i\n%a" :prepend t)
-                                ("pn" "Project-local notes" entry
-                                        (file+headline +org-capture-project-notes-file "Inbox")
-                                        "* %U %?\n%i\n%a" :prepend t)
-                                ("pc" "Project-local changelog" entry
-                                        (file+headline +org-capture-project-changelog-file "Unreleased")
-                                        "* %U %?\n%i\n%a" :prepend t)
-                                ("o" "Centralized templates for projects")
-                                ("ot" "Project todo" entry
-                                        #'+org-capture-central-project-todo-file
-                                        "* TODO %?\n %i\n %a" :heading "Tasks" :prepend nil)
-                                ("on" "Project notes" entry
-                                        #'+org-capture-central-project-notes-file
-                                        "* %U %?\n %i\n %a" :heading "Notes" :prepend t)
-                                ("oc" "Project changelog" entry
-                                        #'+org-capture-central-project-changelog-file
-                                        "* %U %?\n %i\n %a" :heading "Changelog" :prepend t))
-        org-tag-alist '(("@home" . ?h)
-                        ("@errand" . ?e)
-                        ("@computer" . ?c)
-                        ("@phone" . ?p))
-        org-refile-targets '(("~/org/gtd.org" :maxlevel . 2)
-                                ("~/org/someday.org" :level . 1)
-                                ("~/org/tickler.org" :maxlevel . 2)))
+  ;; A little bit of remapping
   (map! :map evil-org-mode-map
         :after evil-org
         :n "C-j" #'org-next-visible-heading
         :n "C-k" #'org-previous-visible-heading))
+
+(after! hl-todo
+  (global-hl-todo-mode)
+  (setq hl-todo-keyword-faces '(("TODO" . "#e76f51")
+                                ("NEXT" . "#d62828")
+                                ("STARTED" . "#2a9d8f")
+                                ("WAITING" . "#e9c46a")
+                                ("DONE" . "#264653")
+                                ("CANCELLED" . "#264653"))))
 (add-hook! org-mode org-bullets-mode)
