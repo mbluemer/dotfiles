@@ -11,6 +11,7 @@
     ~/.config/antigen:
     ~/.zshrc:
     ~/.config/qutebrowser:
+    ~/.qutebrowser:
     ~/.config/skhd:
     ~/.config/yabai:
     ~/.config/fish:
