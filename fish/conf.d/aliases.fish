@@ -9,6 +9,10 @@ alias wiki="nvim ~/vimwiki/index.md"
 alias cp="cp -i"
 alias mv="mv -i"
 
+#### TaskWarrior and TimeWarrior
+alias t="task"
+alias tw="timew"
+
 #### Python
 #alias venv='source /home/$USER/code/virtualenvs/${PWD##*/}/bin/activate.fish'
 alias ptr='poetry run'
