@@ -13,6 +13,7 @@
     ~/.zshrc:
     ~/.config/qutebrowser:
     ~/.qutebrowser:
+    ~/.config/alacritty:
     ~/.config/skhd:
     ~/.config/yabai:
     ~/.config/fish:
