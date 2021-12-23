@@ -8,8 +8,8 @@ end
 
 
 if type -q pyenv
-    pyenv init - | source
-    pyenv virtualenv-init - | source
+    status is-login; and pyenv init --path | source
+    status is-interactive; and pyenv init - | source
 end
 
 if type -q direnv
