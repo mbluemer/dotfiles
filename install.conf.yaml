@@ -17,17 +17,9 @@
     ~/.config/skhd:
     ~/.config/yabai:
     ~/.config/fish:
-    ~/.doom.d:
     ~/.i3:
     ~/.Xmodmap:
 - shell:
   - ['git submodule update --init --recursive', Installing submodules]
   - ['which apt-get && xargs -a apt/packages.txt sudo apt-get install', Trying to install packages with Apt]
   - ['git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.8.0', Installing asdf]
-  - ['git clone --depth 1 https://github.com/hlissner/doom-emacs ~/.emacs.d', Cloning Doom Emacs]
-  -
-    command: '~/.emacs.d/bin/doom install'
-    stdin: true
-    stdout: true
-    description: Install Doom Emacs
-  - ['~/.emacs.d/bin/doom sync', Sync Doom Emacs]
