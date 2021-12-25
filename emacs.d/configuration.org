@@ -1,0 +1,317 @@
+* Introduction
+This is my Emacs configuration! I'm trying Emacs again for what I believe is the third time. My last attempt, using Doom Emacs, was thwarted from slowness. Something about running Emacs on Macos with a HiDPI display was causing it to crawl, but now I'm on Emacs 28 with native compilation! So far things seem to be snappier. Maybe starting from a vanilla configuration rather than Doom will help there too.
+
+** Inspiration
+
+Just a quick list of places I've gotten inspiration from. Sorry if I'm missing any sources. Definitely stolen from some random Reddit threads 😄.
+- https://zzamboni.org/post/beautifying-org-mode-in-emacs/
+- https://labs.phundrak.com/phundrak/dotfiles/src/branch/master/org/config/emacs.org
+
+* Configuration
+** Base
+Here's all of that base configuration that's sets us up for success.
+*** User Information
+Tell Emacs who I am.
+#+begin_src emacs-lisp
+  (setq user-full-name       "Mark Bluemer"
+        user-real-login-name "Mark Bluemer"
+        user-login-name      "mbluemer"
+        user-mail-address    "mark@theblue.dev")
+#+end_src
+
+*** UX Improvements
+
+Shorten the "yes or no" prompt, because who has the time for that.
+#+begin_src emacs-lisp
+  (defalias 'yes-or-no-p 'y-or-n-p)
+#+end_src
+
+Don't ring bells visually or auditory. Don't show a scroll bar. Don't show the toolbar. And oh, add some room to breathe.
+#+begin_src emacs-lisp
+  (setq ring-bell-function 'ignore)
+  (toggle-scroll-bar -1)
+  (tool-bar-mode -1)
+  (set-fringe-mode 10)
+#+end_src
+
+Add line numbers whenever we're programming.
+#+begin_src emacs-lisp
+  (add-hook 'prog-mode-hook 'display-line-numbers-mode)
+#+end_src
+
+Turn ellipsis into a single character rather than a full three dots.
+#+begin_src emacs-lisp
+  (setq truncate-string-ellipsis "…")
+#+end_src
+
+Don't create lockfiles. I don't use TRAMP and these are just cluttering my file system.
+#+begin_src emacs-lisp
+  (setq create-lockfiles nil)
+#+end_src
+
+*** Fonts
+#+begin_src emacs-lisp
+(set-face-attribute 'default nil
+                    :family "JetBrainsMono Nerd Font"
+                    :height 140
+                    :weight 'normal
+                    :width 'normal)
+(set-face-attribute 'fixed-pitch nil
+                    :family "JetBrainsMono Nerd Font"
+                    :height 140
+                    :weight 'normal
+                    :width 'normal)
+(set-face-attribute 'variable-pitch nil
+                    :family "Source Code Sans Pro"
+                    :height 140
+                    :weight 'normal
+                    :width 'normal)
+#+end_src
+
+*** Package Management
+Set up =straight.el= for package management.
+#+begin_src emacs-lisp
+  (defvar bootstrap-version)
+  (let ((bootstrap-file
+         (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+        (bootstrap-version 5))
+    (unless (file-exists-p bootstrap-file)
+      (with-current-buffer
+          (url-retrieve-synchronously
+           "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+           'silent 'inhibit-cookies)
+        (goto-char (point-max))
+        (eval-print-last-sexp)))
+    (load bootstrap-file nil 'nomessage))
+#+end_src
+
+Integrate straight with =use-package= and make sure that we're always using straight by default.
+#+begin_src emacs-lisp
+  (straight-use-package 'use-package)
+  (setq straight-use-package-by-default t)
+#+end_src
+
+Having some trouble with org. Let's see if this fixes it.
+#+begin_src emacs-lisp
+  (straight-use-package 'org)
+#+end_src
+
+
+*** Evil Mode
+Sorry, I like the Vim keybindings. Let's set that up.
+#+begin_src emacs-lisp
+  (use-package evil
+    :init
+    (setq evil-want-keybinding nil)
+    (setq evil-want-C-u-scroll t)
+    :config
+    (evil-mode 1)
+    (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
+    ;; Disable some evil keybindings that are getting in the way
+    (evil-global-set-key 'insert (kbd "C-n") nil)
+    (evil-global-set-key 'insert (kbd "C-p") nil)
+    ;; navigate on visual lines rather than regular lines
+    (evil-global-set-key 'motion "j" 'evil-next-visual-line)
+    (evil-global-set-key 'motion "k" 'evil-previous-visual-line))
+
+  (use-package evil-collection
+    :after evil
+    :config
+    (evil-collection-init))
+#+end_src
+*** Keybindings
+
+#+BEGIN_SRC emacs-lisp
+  (use-package general
+    :config
+    (general-evil-setup))
+#+END_SRC
+** UX
+*** Cleanup
+Cleanup the file system using =no-littering=.
+#+begin_src emacs-lisp
+  (use-package no-littering
+    :custom
+    (auto-save-file-name-transforms
+          `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
+    (custom-file (no-littering-expand-etc-file-name "custom.el")))
+#+end_src
+*** Prettify
+Using gruvbox as a theme right now.
+#+begin_src emacs-lisp
+  (use-package gruvbox-theme
+    :config (load-theme 'gruvbox-dark-soft t))
+#+end_src
+
+Doom modeline for the fun of it. Also throw any configuration that changes the modeline here, like =display-time-mode=.
+#+begin_src emacs-lisp
+      (use-package doom-modeline
+        :custom
+        (display-time-format "%Y-%m-%d %H:%M")
+        (display-time-default-load-average nil)
+          :config
+      (doom-modeline-mode 1)
+    (display-time-mode 1)
+  (column-number-mode 1))
+#+end_src
+
+*** Completion
+Let's set up our completion framework and all of the libraries that help out.
+
+Was trying out plain =icomplete= (fido) but then switched over to vertico and been enjoying it so far.
+#+begin_src emacs-lisp
+  (use-package vertico
+    :init
+    (vertico-mode))
+#+end_src
+
+Pull in =orderless= for sorting and =marginalia= to add some extra info to our completions. The built in =savehist= will allow for common/recent commands to bubble up to the top of search and persist between sessions.
+#+begin_src emacs-lisp
+  (use-package orderless
+    :ensure t
+    :custom (completion-styles '(orderless)))
+  (use-package marginalia
+    :init
+    (marginalia-mode))
+  (use-package savehist
+    :init
+    (savehist-mode))
+#+end_src
+
+The =consult= package offers some extra completion functions which I haven't fully utilized yet but everyone reccomends it so 🤷. Just install it for now.
+#+begin_src emacs-lisp
+  (use-package consult)
+#+end_src
+
+Add mini-buffer actions using =embark=.
+#+begin_src emacs-lisp
+  (defun embark-which-key-indicator ()
+    "An embark indicator that displays keymaps using which-key.
+  The which-key help message will show the type and value of the
+  current target followed by an ellipsis if there are further
+  targets."
+    (lambda (&optional keymap targets prefix)
+      (if (null keymap)
+          (which-key--hide-popup-ignore-command)
+        (which-key--show-keymap
+         (if (eq (plist-get (car targets) :type) 'embark-become)
+             "Become"
+           (format "Act on %s '%s'%s"
+                   (plist-get (car targets) :type)
+                   (embark--truncate-target (plist-get (car targets) :target))
+                   (if (cdr targets) "…" "")))
+         (if prefix
+             (pcase (lookup-key keymap prefix 'accept-default)
+               ((and (pred keymapp) km) km)
+               (_ (key-binding prefix 'accept-default)))
+           keymap)
+         nil nil t (lambda (binding)
+                     (not (string-suffix-p "-argument" (cdr binding))))))))
+  (use-package embark
+    :custom
+    (embark-indicators
+     '(embark-which-key-indicator
+       embark-highlight-indicator
+       embark-isearch-highlight-indicator))
+    :bind
+    (("C-." . embark-act)))
+  (use-package embark-consult
+    :after (embark consult))
+#+end_src
+
+*** Extra Help
+
+Always need =which-key= because I constantly forget the key combos I'm looking for.
+#+begin_src emacs-lisp
+  (use-package which-key
+    :config (which-key-mode 1))
+#+end_src
+
+** Programming
+*** Base
+Clean up extra whitespace on save
+#+begin_src emacs-lisp
+  (add-hook 'before-save-hook #'whitespace-cleanup)
+#+end_src
+*** Completion
+Trying out =corfu= for text completion rather than =company=.
+#+begin_src emacs-lisp
+  (use-package corfu
+    :init
+    (corfu-global-mode)
+    :custom
+    (corfu-auto t)
+    (corfu-quit-no-match t)
+    :general
+    (:keymaps 'corfu-map
+              "C-n" 'corfu-next
+              "C-p" 'corfu-previous))
+#+end_src
+*** LSP
+Pretty self explanatory
+#+begin_src emacs-lisp
+  (use-package lsp-mode
+    :init
+    (setq lsp-pylsp-plugins-pylint-enabled t)
+    (setq lsp-pylsp-plugins-pydocstyle-enabled nil)
+    (setq lsp-keymap-prefix "C-c l")
+    :hook (
+           (python-mode . lsp)
+           (lsp-mode . lsp-enable-which-key-integration))
+    :commands lsp)
+  (use-package lsp-ui)
+#+end_src
+
+Also add =flycheck= for linting. I need to work on resolving whether lsp or flycheck should be doing the heavy lifting and whether or not they should work together or separately. For now just install them both.
+#+begin_src emacs-lisp
+  (use-package flycheck
+    :init (global-flycheck-mode))
+#+end_src
+
+** Org
+#+begin_src emacs-lisp
+  (defun mb/org-mode-setup ()
+    (org-indent-mode)
+    (visual-line-mode 1))
+  (defun mb/org-font-setup ()
+  ;; Set faces for heading levels
+  (dolist (face '((org-level-1 . 1.2)
+                  (org-level-2 . 1.1)
+                  (org-level-3 . 1.05)
+                  (org-level-4 . 1.0)
+                  (org-level-5 . 1.1)
+                  (org-level-6 . 1.1)
+                  (org-level-7 . 1.1)
+                  (org-level-8 . 1.1)))
+    (set-face-attribute (car face) nil :font "Arial" :weight 'regular :height (cdr face)))
+
+  ;; Ensure that anything that should be fixed-pitch in Org files appears that way
+  (set-face-attribute 'org-block nil    :foreground nil :inherit 'fixed-pitch)
+  (set-face-attribute 'org-table nil    :inherit 'fixed-pitch)
+  (set-face-attribute 'org-formula nil  :inherit 'fixed-pitch)
+  (set-face-attribute 'org-code nil     :inherit '(shadow fixed-pitch))
+  (set-face-attribute 'org-table nil    :inherit '(shadow fixed-pitch))
+  (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
+  (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
+  (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
+  (set-face-attribute 'org-checkbox nil  :inherit 'fixed-pitch)
+  (set-face-attribute 'line-number nil :inherit 'fixed-pitch)
+  (set-face-attribute 'line-number-current-line nil :inherit 'fixed-pitch))
+
+  (use-package org
+  :hook (org-mode . mb/org-mode-setup)
+    :config
+    (mb/org-font-setup))
+  (use-package org-bullets
+    :hook
+    (org-mode . org-bullets-mode))
+
+  (use-package org-journal
+    :custom
+    (org-journal-dir "~/org/journal"))
+  (use-package visual-fill-column
+    :hook (org-mode . visual-fill-column-mode)
+    :custom
+    (visual-fill-column-width 100)
+    (visual-fill-column-center-text t))
+#+end_src
