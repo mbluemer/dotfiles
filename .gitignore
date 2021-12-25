@@ -14,6 +14,7 @@
 !/fish/conf.d/aliases.fish
 /emacs.d/
 !/emacs.d/init.el
+/hammerspoon/Spoons
 
 # Unsure what these are
 *.zwc
