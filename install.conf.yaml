@@ -13,10 +13,12 @@
     ~/.zshrc:
     ~/.config/qutebrowser:
     ~/.qutebrowser:
+    ~/.emacs.d:
     ~/.config/alacritty:
     ~/.config/skhd:
     ~/.config/yabai:
     ~/.config/fish:
+    ~/.hammerspoon:
     ~/.i3:
     ~/.Xmodmap:
 - shell:
