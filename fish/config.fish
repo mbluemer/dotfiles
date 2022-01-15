@@ -1,6 +1,8 @@
 set -xg EDITOR vim
 
-starship init fish | source
+if type -q starfish
+    starship init fish | source
+end
 
 if test -e ~/.asdf
     source ~/.asdf/asdf.fish
