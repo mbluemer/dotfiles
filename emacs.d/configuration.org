@@ -155,6 +155,12 @@ Doom modeline for the fun of it. Also throw any configuration that changes the m
   (column-number-mode 1))
 #+end_src
 
+Rainbow delimiters because it makes everything easier to read.
+#+begin_src emacs-lisp
+    (use-package rainbow-delimiters
+  :hook (prog-mode . rainbow-delimiters-mode))
+#+end_src
+
 *** Completion
 Let's set up our completion framework and all of the libraries that help out.
 
@@ -180,7 +186,10 @@ Pull in =orderless= for sorting and =marginalia= to add some extra info to our c
 
 The =consult= package offers some extra completion functions which I haven't fully utilized yet but everyone reccomends it so 🤷. Just install it for now.
 #+begin_src emacs-lisp
-  (use-package consult)
+      (use-package consult
+    :bind
+  (("C-s" . consult-line)
+   ("C-x b" . consult-buffer)))
 #+end_src
 
 Add mini-buffer actions using =embark=.
@@ -227,6 +236,20 @@ Always need =which-key= because I constantly forget the key combos I'm looking f
     :config (which-key-mode 1))
 #+end_src
 
+Add =helpful= to make help more... helpful.
+#+begin_src emacs-lisp
+        (use-package helpful
+      :bind
+      (("C-h f" . helpful-callable)
+      ("C-h v" . helpful-variable)
+  ("C-h k" . helpful-key)))
+#+end_src
+
+Automatically create pairs of parentheses.
+#+begin_src emacs-lisp
+  (electric-pair-mode 1)
+#+end_src
+
 ** Programming
 *** Base
 Clean up extra whitespace on save
@@ -267,7 +290,17 @@ Also add =flycheck= for linting. I need to work on resolving whether lsp or flyc
   (use-package flycheck
     :init (global-flycheck-mode))
 #+end_src
+*** Git
+All hail =magit=.
+#+begin_src emacs-lisp
+(use-package magit)
+#+end_src
 
+
+*** Python
+#+begin_src emacs-lisp
+  (use-package pyvenv)
+#+end_src
 ** Org
 #+begin_src emacs-lisp
   (defun mb/org-mode-setup ()
