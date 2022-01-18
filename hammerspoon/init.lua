@@ -154,6 +154,12 @@ local BINDINGS = {
       key = 'P',
       onEnter = function() hs.application.launchOrFocus('Spotify') end,
    },
+   {
+      description = '[O]utlook',
+      key = 'O',
+      onEnter = function() hs.application.launchOrFocus('Microsoft Outlook') end,
+
+   },
 }
 
 for _, binding in ipairs(BINDINGS) do
